@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <cmath>
 
 #include <pulse/pulseaudio.h>
 
@@ -18,6 +19,10 @@ void sink_list_cb(pa_context *c, const pa_sink_info *i, int eol, void *userdata)
 void server_info_cb(pa_context* context, const pa_server_info* i, void* raw);
 void success_cb(pa_context* context, int success, void* raw);
 
+double round(double value) {
+    return (value > 0.0) ? floor(value + 0.5) : ceil(value - 0.5);
+}
+
 class Sink {
 private:
 
@@ -26,7 +31,7 @@ public:
     std::string name;
     std::string description;
     pa_cvolume volume;
-    double volume_linear;
+    int volume_percent;
     bool mute;
 
     Sink(const pa_sink_info* i) {
@@ -37,7 +42,8 @@ public:
         int n;
         for (n = 0; n < volume.channels; ++n)
             volume.values[n] = i->volume.values[n];
-        volume_linear = pa_sw_volume_to_linear(pa_cvolume_avg(&volume));
+        volume_percent = (int) round(((double) pa_cvolume_avg(&volume) * 100.) / PA_VOLUME_NORM);
+
         mute = i->mute == 1;
     }
 };
@@ -118,10 +124,15 @@ public:
         return get_sink(default_sink_name);
     }
 
-    void set_sink_volume(Sink& sink, double new_volume) {
-        pa_volume_t new_volume_t = pa_sw_volume_from_linear(new_volume);
-        pa_cvolume* new_cvolume = pa_cvolume_set(&sink.volume, sink.volume.channels, new_volume_t);
+    void set_sink_volume(Sink& sink, int new_volume) {
+        pa_cvolume* new_cvolume = pa_cvolume_set(&sink.volume, sink.volume.channels, (pa_volume_t) round(fmax(((double)new_volume * PA_VOLUME_NORM) / 100, 0)));
         pa_operation* op = pa_context_set_sink_volume_by_index(context, sink.index, new_cvolume, success_cb, NULL);
+        iterate(op);
+        pa_operation_unref(op);
+    }
+
+    void set_sink_mute(Sink& sink, bool mute) {
+        pa_operation* op = pa_context_set_sink_mute_by_index(context, sink.index, (int) mute, success_cb, NULL);
         iterate(op);
         pa_operation_unref(op);
     }

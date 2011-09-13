@@ -1,6 +1,6 @@
 
 CXX = g++
-CXXFLAGS = -lpulse -Wall
+CXXFLAGS = -lpulse -lboost_program_options -Wall
 
 all: pamixer
 
