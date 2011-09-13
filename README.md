@@ -26,23 +26,23 @@ Installation
 
     * Get the source::
 
->       git clone https://cdemoulins@github.com/cdemoulins/pamixer.git
+> "git clone https://cdemoulins@github.com/cdemoulins/pamixer.git"
 
     * Compile::
 
->       make
+> "make"
 
     * And use it, no install command for now::
 
->       ./pamixer --help
+> "./pamixer --help
 
->       Allowed options:
->         -h [ --help ]         help message
->         -s [ --sink ] arg     choose a different sink than the default
->         --get                 get the current volume
->         --set arg             set the volume
->         --increase arg        increase the volume
->         --decrease arg        decrease the volume
->         --toggle-mute         switch between mute and unmute
->         --list-sinks          list the sinks
+ Allowed options:
+   -h [ --help ]         help message
+   -s [ --sink ] arg     choose a different sink than the default
+   --get                 get the current volume
+   --set arg             set the volume
+   --increase arg        increase the volume
+   --decrease arg        decrease the volume
+   --toggle-mute         switch between mute and unmute
+   --list-sinks          list the sinks"
 
