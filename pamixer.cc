@@ -85,7 +85,7 @@ main(int argc, char* argv[])
         s = pulse.get_sink(s.index);
     }
 
-    if (vm.count("toggle_mute")) {
+    if (vm.count("toggle-mute")) {
         pulse.set_sink_mute(s, !s.mute);
     }
 
