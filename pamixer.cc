@@ -35,7 +35,8 @@ main(int argc, char* argv[])
         ("set", po::value<double>(&value), "set the volume")
         ("increase", po::value<double>(&value), "increase the volume")
         ("decrease", po::value<double>(&value), "decrease the volume")
-        ("toggle_mute", "switch between mute and unmute")
+        ("toggle-mute", "switch between mute and unmute")
+        ("list-sinks", "list the sinks")
     ;
 
     po::variables_map vm;
@@ -74,6 +75,12 @@ main(int argc, char* argv[])
 
     if (vm.count("get")) {
         cout << s.volume_percent;
+    } else if (vm.count("list-sinks")) {
+        list<Sink> sinks = pulse.get_sinks();
+        list<Sink>::iterator it;
+        for (it = sinks.begin(); it != sinks.end(); ++it) {
+            cout << it->index << " " << it->name << " " << it->description << endl;
+        }
     }
 
     return 0;

@@ -24,8 +24,6 @@ double round(double value) {
 }
 
 class Sink {
-private:
-
 public:
     uint32_t index;
     std::string name;
