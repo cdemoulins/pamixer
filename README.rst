@@ -40,10 +40,12 @@ Installation
         Allowed options:
           -h [ --help ]         help message
           -s [ --sink ] arg     choose a different sink than the default
-          --get                 get the current volume
-          --set arg             set the volume
+          --get-volume          get the current volume
+          --set-volume arg      set the volume
           --increase arg        increase the volume
           --decrease arg        decrease the volume
           --toggle-mute         switch between mute and unmute
+          --mute                set mute
+          --unmute              unset mute
+          --get-mute            unset mute
           --list-sinks          list the sinks
-
