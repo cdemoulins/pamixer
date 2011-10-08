@@ -54,7 +54,7 @@ main(int argc, char* argv[])
         ("toggle-mute", "switch between mute and unmute")
         ("mute", "set mute")
         ("unmute", "unset mute")
-        ("get-mute", "unset mute")
+        ("get-mute", "display true if the volume is mute, false otherwise")
         ("list-sinks", "list the sinks")
     ;
 
