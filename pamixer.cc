@@ -100,7 +100,7 @@ main(int argc, char* argv[])
     }
 
     int ret = 0;
-    if (vm.count("get-volumne")) {
+    if (vm.count("get-volume")) {
         cout << s.volume_percent;
         ret = (s.volume_percent > 0 ? 0 : 1);
     } else if (vm.count("get-mute")) {
