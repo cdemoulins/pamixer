@@ -2,7 +2,7 @@
 
 pkgname=pamixer-git
 pkgver=20110914
-pkgrel=2
+pkgrel=3
 pkgdesc="Pulseaudio command-line mixer like amixer"
 arch=('i686' 'x86_64')
 url="https://github.com/cdemoulins/pamixer"
@@ -13,7 +13,7 @@ makedepends=('git' 'boost')
 source=()
 md5sums=()
 
-_gitroot=https://cdemoulins@github.com/cdemoulins/pamixer.git
+_gitroot=https://github.com/cdemoulins/pamixer.git
 _gitname=pamixer
 
 build() {
