@@ -40,6 +40,11 @@ double round(double value) {
     return (value > 0.0) ? floor(value + 0.5) : ceil(value - 0.5);
 }
 
+/*
+ * Class to store sink related informations
+ *
+ * @see pa_sink_info
+ */
 class Sink {
 public:
     uint32_t index;
@@ -63,6 +68,12 @@ public:
     }
 };
 
+
+/*
+ * Class to manipulate the pulseaudio server using the asynchronous C library.
+ * When the constructor is called, a connection is established to a local pulseaudio server.
+ * If the connection fail an exception is raised.
+ */
 class Pulseaudio {
 private:
     pa_mainloop* mainloop;
@@ -79,6 +90,10 @@ private:
 public:
     state_t state;
 
+    /*
+     * Initialize the connection to a local pulseaudio
+     * @param client_name
+     */
     Pulseaudio(std::string client_name) {
         mainloop = pa_mainloop_new();
         mainloop_api = pa_mainloop_get_api(mainloop);
@@ -95,12 +110,18 @@ public:
         }
     }
 
+    /*
+     * Properly disconnect and free all the resources
+     */
     ~Pulseaudio() {
         if (state == CONNECTED)
             pa_context_disconnect(context);
         pa_mainloop_free(mainloop);
     }
 
+    /*
+     * @return list of the available sinks
+     */
     std::list<Sink> get_sinks() {
         std::list<Sink> sinks;
         pa_operation* op = pa_context_get_sink_info_list(context, &sink_list_cb, &sinks);
@@ -110,6 +131,10 @@ public:
         return sinks;
     }
 
+    /*
+     * Get a specific sink
+     * @param index index of the sink
+     */
     Sink get_sink(uint32_t index) {
         std::list<Sink> sinks;
         pa_operation* op = pa_context_get_sink_info_by_index(context, index, &sink_list_cb, &sinks);
@@ -120,6 +145,10 @@ public:
         return *(sinks.begin());
     }
 
+    /*
+     * Get a specific sink
+     * @param name name of the requested sink
+     */
     Sink get_sink(std::string name) {
         std::list<Sink> sinks;
         pa_operation* op = pa_context_get_sink_info_by_name(context, name.c_str(), &sink_list_cb, &sinks);
@@ -130,6 +159,9 @@ public:
         return *(sinks.begin());
     }
 
+    /*
+     * Get the default sink
+     */
     Sink get_default_sink() {
         std::string default_sink_name;
         pa_operation* op = pa_context_get_server_info(context, &server_info_cb, &default_sink_name);
@@ -139,6 +171,11 @@ public:
         return get_sink(default_sink_name);
     }
 
+    /*
+     * Set the sink volume to a new value
+     * @param sink
+     * @param new_volume
+     */
     void set_sink_volume(Sink& sink, int new_volume) {
         pa_cvolume* new_cvolume = pa_cvolume_set(&sink.volume, sink.volume.channels, (pa_volume_t) round(fmax(((double)new_volume * PA_VOLUME_NORM) / 100, 0)));
         pa_operation* op = pa_context_set_sink_volume_by_index(context, sink.index, new_cvolume, success_cb, NULL);
@@ -146,6 +183,11 @@ public:
         pa_operation_unref(op);
     }
 
+    /*
+     * Change the mute state of a sink
+     * @param sink
+     * @param mute
+     */
     void set_sink_mute(Sink& sink, bool mute) {
         pa_operation* op = pa_context_set_sink_mute_by_index(context, sink.index, (int) mute, success_cb, NULL);
         iterate(op);
