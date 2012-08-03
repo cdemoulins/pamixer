@@ -1,8 +1,8 @@
 # Maintainer: Clément Démoulins <clement@archivel.fr>
 
 pkgname=pamixer-git
-pkgver=20110914
-pkgrel=3
+pkgver=20111204
+pkgrel=1
 pkgdesc="Pulseaudio command-line mixer like amixer"
 arch=('i686' 'x86_64')
 url="https://github.com/cdemoulins/pamixer"
