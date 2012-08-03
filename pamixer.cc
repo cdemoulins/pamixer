@@ -53,7 +53,7 @@ int
 main(int argc, char* argv[])
 {
     string sink_name, source_name;
-    double value;
+    int value;
 
     po::options_description options("Allowed options");
     options.add_options()
@@ -62,9 +62,9 @@ main(int argc, char* argv[])
         ("source", po::value(&source_name), "choose a different source than the default")
         ("default-source", "select the default source")
         ("get-volume", "get the current volume")
-        ("set-volume", po::value<double>(&value), "set the volume")
-        ("increase", po::value<double>(&value), "increase the volume")
-        ("decrease", po::value<double>(&value), "decrease the volume")
+        ("set-volume", po::value<int>(&value), "set the volume")
+        ("increase", po::value<int>(&value), "increase the volume")
+        ("decrease", po::value<int>(&value), "decrease the volume")
         ("toggle-mute", "switch between mute and unmute")
         ("mute", "set mute")
         ("unmute", "unset mute")
@@ -97,7 +97,7 @@ main(int argc, char* argv[])
     Pulseaudio pulse("pamixer");
     Device device = get_selected_device(pulse, vm, sink_name, source_name);
 
-    if (vm.count("set")) {
+    if (vm.count("set-volume")) {
         pulse.set_volume(device, value);
         device = get_selected_device(pulse, vm, sink_name, source_name);
     } else if (vm.count("increase")) {
