@@ -37,16 +37,30 @@ void conflicting_options(const po::variables_map& vm, const char* opt1, const ch
     }
 }
 
+Device get_selected_device(Pulseaudio& pulse, po::variables_map vm, string sink_name, string source_name) {
+    Device device = pulse.get_default_sink();
+    if (vm.count("sink")) {
+        device = pulse.get_sink(sink_name);
+    } else if (vm.count("default-source")) {
+        device = pulse.get_default_source();
+    } else if (vm.count("source")) {
+        device = pulse.get_source(source_name);
+    }
+    return device;
+}
+
 int
 main(int argc, char* argv[])
 {
-    string sink;
+    string sink_name, source_name;
     double value;
 
     po::options_description options("Allowed options");
     options.add_options()
         ("help,h", "help message")
-        ("sink,s", po::value(&sink), "choose a different sink than the default")
+        ("sink,s", po::value(&sink_name), "choose a different sink than the default")
+        ("source", po::value(&source_name), "choose a different source than the default")
+        ("default-source", "select the default source")
         ("get-volume", "get the current volume")
         ("set-volume", po::value<double>(&value), "set the volume")
         ("increase", po::value<double>(&value), "increase the volume")
@@ -56,6 +70,7 @@ main(int argc, char* argv[])
         ("unmute", "unset mute")
         ("get-mute", "display true if the volume is mute, false otherwise")
         ("list-sinks", "list the sinks")
+        ("list-sources", "list the sources")
     ;
 
     po::variables_map vm;
@@ -73,44 +88,57 @@ main(int argc, char* argv[])
     conflicting_options(vm, "toggle-mute", "mute");
     conflicting_options(vm, "toggle-mute", "unmute");
     conflicting_options(vm, "unmute", "mute");
+    conflicting_options(vm, "sink", "source");
+    conflicting_options(vm, "sink", "default-source");
+    conflicting_options(vm, "get-volume", "get-mute");
+    conflicting_options(vm, "get-volume", "list-sinks");
+    conflicting_options(vm, "get-volume", "list-sources");
 
     Pulseaudio pulse("pamixer");
-    Sink s = pulse.get_default_sink();
-    if (vm.count("sink")) {
-        s = pulse.get_sink(sink);
-    }
+    Device device = get_selected_device(pulse, vm, sink_name, source_name);
 
     if (vm.count("set")) {
-        pulse.set_sink_volume(s, value);
-        s = pulse.get_sink(s.index);
+        pulse.set_volume(device, value);
+        device = get_selected_device(pulse, vm, sink_name, source_name);
     } else if (vm.count("increase")) {
-        pulse.set_sink_volume(s, s.volume_percent + value);
-        s = pulse.get_sink(s.index);
+        pulse.set_volume(device, device.volume_percent + value);
+        device = get_selected_device(pulse, vm, sink_name, source_name);
     } else if (vm.count("decrease")) {
-        pulse.set_sink_volume(s, s.volume_percent - value);
-        s = pulse.get_sink(s.index);
+        pulse.set_volume(device, device.volume_percent - value);
+        device = get_selected_device(pulse, vm, sink_name, source_name);
     }
 
     if (vm.count("toggle-mute")) {
-        pulse.set_sink_mute(s, !s.mute);
+        pulse.set_mute(device, !device.mute);
     } else if (vm.count("mute")) {
-        pulse.set_sink_mute(s, true);
+        pulse.set_mute(device, true);
     } else if (vm.count("unmute")) {
-        pulse.set_sink_mute(s, false);
+        pulse.set_mute(device, false);
     }
 
     int ret = 0;
     if (vm.count("get-volume")) {
-        cout << s.volume_percent;
-        ret = (s.volume_percent > 0 ? 0 : 1);
+        cout << device.volume_percent << flush;
+        ret = (device.volume_percent > 0 ? 0 : 1);
     } else if (vm.count("get-mute")) {
-        cout << boolalpha << s.mute;
-        ret = (s.mute ? 0 : 1);
-    } else if (vm.count("list-sinks")) {
-        list<Sink> sinks = pulse.get_sinks();
-        list<Sink>::iterator it;
-        for (it = sinks.begin(); it != sinks.end(); ++it) {
-            cout << it->index << " " << it->name << " " << it->description << endl;
+        cout << boolalpha << device.mute << flush;
+        ret = (device.mute ? 0 : 1);
+    } else {
+        if (vm.count("list-sinks")) {
+            list<Device> sinks = pulse.get_sinks();
+            list<Device>::iterator it;
+            cout << "Sinks:" << endl;
+            for (it = sinks.begin(); it != sinks.end(); ++it) {
+                cout << it->index << " \"" << it->name << "\" \"" << it->description << "\"" << endl;
+            }
+        }
+        if (vm.count("list-sources")) {
+            list<Device> sources = pulse.get_sources();
+            list<Device>::iterator it;
+            cout << "Sources:" << endl;
+            for (it = sources.begin(); it != sources.end(); ++it) {
+                cout << it->index << " \"" << it->name << "\" \"" << it->description << "\"" << endl;
+            }
         }
     }
 
