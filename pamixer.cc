@@ -20,6 +20,7 @@
 #include <boost/program_options.hpp>
 namespace po = boost::program_options;
 
+#include <cmath>
 #include <list>
 #include <string>
 #include <iostream>
@@ -67,6 +68,7 @@ main(int argc, char* argv[])
         ("decrease", po::value<int>(&value), "decrease the volume")
         ("toggle-mute", "switch between mute and unmute")
         ("mute", "set mute")
+        ("allow-boost", "allow volume to go above 100%")
         ("unmute", "unset mute")
         ("get-mute", "display true if the volume is mute, false otherwise")
         ("list-sinks", "list the sinks")
@@ -97,14 +99,17 @@ main(int argc, char* argv[])
     Pulseaudio pulse("pamixer");
     Device device = get_selected_device(pulse, vm, sink_name, source_name);
 
-    if (vm.count("set-volume")) {
-        pulse.set_volume(device, value);
-        device = get_selected_device(pulse, vm, sink_name, source_name);
-    } else if (vm.count("increase")) {
-        pulse.set_volume(device, device.volume_percent + value);
-        device = get_selected_device(pulse, vm, sink_name, source_name);
-    } else if (vm.count("decrease")) {
-        pulse.set_volume(device, device.volume_percent - value);
+    if (vm.count("set-volume") || vm.count("increase") || vm.count("decrease")) {
+        int new_value = value;
+        if (vm.count("increase")) {
+            new_value += device.volume_percent;
+        } else if (vm.count("decrease")) {
+            new_value = device.volume_percent - value;
+        }
+        if (!vm.count("allow-boost")) {
+            new_value = fmin((double)new_value, 100);
+        }
+        pulse.set_volume(device, new_value);
         device = get_selected_device(pulse, vm, sink_name, source_name);
     }
 

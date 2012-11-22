@@ -53,6 +53,7 @@ Installation
           --mute                set mute
           --unmute              unset mute
           --get-mute            display true if the volume is mute, false otherwise
+          --allow-boost         allow volume to go above 100%
           --list-sinks          list the sinks
           --list-sources        list the sources
 
