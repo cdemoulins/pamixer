@@ -1,0 +1,5 @@
+/pamixer
+/archlinux/**/src
+/archlinux/**/pkg
+*.xz
+*.gz
