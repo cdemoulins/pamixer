@@ -1,8 +1,8 @@
 # Maintainer: Clément Démoulins <clement@archivel.fr>
 
 pkgname=pamixer
-pkgver=1.0
-pkgrel=3
+pkgver=1.1
+pkgrel=1
 pkgdesc="Pulseaudio command-line mixer like amixer"
 arch=('i686' 'x86_64')
 url="https://github.com/cdemoulins/pamixer"
@@ -12,16 +12,16 @@ replaces=('pamixer-git')
 depends=('libpulse' 'boost-libs')
 makedepends=('boost')
 
-source=(https://github.com/cdemoulins/${pkgname}/tarball/${pkgver})
-md5sums=('4269a88dd4f8777f58bde9f773c5c48e')
+source=(https://github.com/cdemoulins/${pkgname}/archive/${pkgver}.tar.gz)
+md5sums=('03745caf8f129870133a732528d46316')
 
 build() {
-  cd "$srcdir/cdemoulins-pamixer-bac3ad3"
+  cd "$srcdir/${pkgname}-${pkgver}"
   make
 }
 
 package() {
-  cd "$srcdir/cdemoulins-pamixer-bac3ad3"
+  cd "$srcdir/${pkgname}-${pkgver}"
   install -D -m755 pamixer $pkgdir/usr/bin/pamixer
 }
 
