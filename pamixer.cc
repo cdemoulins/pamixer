@@ -96,56 +96,63 @@ main(int argc, char* argv[])
     conflicting_options(vm, "get-volume", "list-sinks");
     conflicting_options(vm, "get-volume", "list-sources");
 
-    Pulseaudio pulse("pamixer");
-    Device device = get_selected_device(pulse, vm, sink_name, source_name);
+    try
+    {
+        Pulseaudio pulse("pamixer");
+        Device device = get_selected_device(pulse, vm, sink_name, source_name);
 
-    if (vm.count("set-volume") || vm.count("increase") || vm.count("decrease")) {
-        int new_value = value;
-        if (vm.count("increase")) {
-            new_value += device.volume_percent;
-        } else if (vm.count("decrease")) {
-            new_value = device.volume_percent - value;
+        if (vm.count("set-volume") || vm.count("increase") || vm.count("decrease")) {
+            int new_value = value;
+            if (vm.count("increase")) {
+                new_value += device.volume_percent;
+            } else if (vm.count("decrease")) {
+                new_value = device.volume_percent - value;
+            }
+            if (!vm.count("allow-boost")) {
+                new_value = fmin((double)new_value, 100);
+            }
+            pulse.set_volume(device, new_value);
+            device = get_selected_device(pulse, vm, sink_name, source_name);
         }
-        if (!vm.count("allow-boost")) {
-            new_value = fmin((double)new_value, 100);
+
+        if (vm.count("toggle-mute")) {
+            pulse.set_mute(device, !device.mute);
+        } else if (vm.count("mute")) {
+            pulse.set_mute(device, true);
+        } else if (vm.count("unmute")) {
+            pulse.set_mute(device, false);
         }
-        pulse.set_volume(device, new_value);
-        device = get_selected_device(pulse, vm, sink_name, source_name);
-    }
 
-    if (vm.count("toggle-mute")) {
-        pulse.set_mute(device, !device.mute);
-    } else if (vm.count("mute")) {
-        pulse.set_mute(device, true);
-    } else if (vm.count("unmute")) {
-        pulse.set_mute(device, false);
-    }
-
-    int ret = 0;
-    if (vm.count("get-volume")) {
-        cout << device.volume_percent << flush;
-        ret = (device.volume_percent > 0 ? 0 : 1);
-    } else if (vm.count("get-mute")) {
-        cout << boolalpha << device.mute << flush;
-        ret = (device.mute ? 0 : 1);
-    } else {
-        if (vm.count("list-sinks")) {
-            list<Device> sinks = pulse.get_sinks();
-            list<Device>::iterator it;
-            cout << "Sinks:" << endl;
-            for (it = sinks.begin(); it != sinks.end(); ++it) {
-                cout << it->index << " \"" << it->name << "\" \"" << it->description << "\"" << endl;
+        int ret = 0;
+        if (vm.count("get-volume")) {
+            cout << device.volume_percent << flush;
+            ret = (device.volume_percent > 0 ? 0 : 1);
+        } else if (vm.count("get-mute")) {
+            cout << boolalpha << device.mute << flush;
+            ret = (device.mute ? 0 : 1);
+        } else {
+            if (vm.count("list-sinks")) {
+                list<Device> sinks = pulse.get_sinks();
+                list<Device>::iterator it;
+                cout << "Sinks:" << endl;
+                for (it = sinks.begin(); it != sinks.end(); ++it) {
+                    cout << it->index << " \"" << it->name << "\" \"" << it->description << "\"" << endl;
+                }
+            }
+            if (vm.count("list-sources")) {
+                list<Device> sources = pulse.get_sources();
+                list<Device>::iterator it;
+                cout << "Sources:" << endl;
+                for (it = sources.begin(); it != sources.end(); ++it) {
+                    cout << it->index << " \"" << it->name << "\" \"" << it->description << "\"" << endl;
+                }
             }
         }
-        if (vm.count("list-sources")) {
-            list<Device> sources = pulse.get_sources();
-            list<Device>::iterator it;
-            cout << "Sources:" << endl;
-            for (it = sources.begin(); it != sources.end(); ++it) {
-                cout << it->index << " \"" << it->name << "\" \"" << it->description << "\"" << endl;
-            }
-        }
-    }
 
-    return ret;
+        return ret;
+    }
+    catch (const char* message)
+    {
+        cerr << message << endl;
+    }
 }
