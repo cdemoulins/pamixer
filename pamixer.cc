@@ -51,10 +51,31 @@ Device get_selected_device(Pulseaudio& pulse, po::variables_map vm, string sink_
 }
 
 int
+gammaCorrection(int i, double gamma, int delta) {
+	if(gamma == 1.0) {
+		return i;
+	}
+	
+	double j = double(i);
+	double relRelta = double(delta) / 100.0;
+	
+	j = j / 100.0;
+	j = pow(j, (1.0/gamma));
+	
+	j = j + relRelta;
+	
+	j = pow(j, gamma);
+	j = j * 100.0;
+	
+	return int(j + 0.5);
+}
+
+int
 main(int argc, char* argv[])
 {
     string sink_name, source_name;
     int value;
+    double gamma;
 
     po::options_description options("Allowed options");
     options.add_options()
@@ -69,6 +90,7 @@ main(int argc, char* argv[])
         ("toggle-mute", "switch between mute and unmute")
         ("mute", "set mute")
         ("allow-boost", "allow volume to go above 100%")
+        ("gamma", po::value<double>(&gamma)->default_value(1.0), "increase/decrease using gamma correction")
         ("unmute", "unset mute")
         ("get-mute", "display true if the volume is mute, false otherwise")
         ("list-sinks", "list the sinks")
@@ -104,9 +126,9 @@ main(int argc, char* argv[])
         if (vm.count("set-volume") || vm.count("increase") || vm.count("decrease")) {
             int new_value = value;
             if (vm.count("increase")) {
-                new_value += device.volume_percent;
+                new_value = gammaCorrection(device.volume_percent, gamma,  value);
             } else if (vm.count("decrease")) {
-                new_value = device.volume_percent - value;
+                new_value = gammaCorrection(device.volume_percent, gamma, -value);
             }
             if (!vm.count("allow-boost")) {
                 new_value = fmin((double)new_value, 100);
