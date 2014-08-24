@@ -147,10 +147,10 @@ main(int argc, char* argv[])
 
         int ret = 0;
         if (vm.count("get-volume")) {
-            cout << device.volume_percent << flush;
+            cout << device.volume_percent << "\n" << flush;
             ret = (device.volume_percent > 0 ? 0 : 1);
         } else if (vm.count("get-mute")) {
-            cout << boolalpha << device.mute << flush;
+            cout << boolalpha << device.mute << "\n" << flush;
             ret = (device.mute ? 0 : 1);
         } else {
             if (vm.count("list-sinks")) {
