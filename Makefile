@@ -1,11 +1,12 @@
 LDLIBS   ?= -lpulse -lboost_program_options
 CXXFLAGS ?= --std=c++11 -Wall -Werror -Wextra -pedantic
+PREFIX   ?= /usr/local
 
 ## Target if make is invoked without any parameters (goal)
 .DEFAULT_GOAL: all
 
 ## "Virtual" targets without actual files to update/create
-.PHONY: all clean distclean
+.PHONY: all clean distclean install
 
 
 all: pamixer
@@ -21,3 +22,5 @@ clean:
 distclean: clean
 	rm -f pamixer
 
+install: pamixer
+	install pamixer $(PREFIX)/bin/
