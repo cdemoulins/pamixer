@@ -1,6 +1,5 @@
-CXX ?= g++
-CXXFLAGS ?= -lpulse -lboost_program_options -Wall
-
+LDLIBS   ?= -lpulse -lboost_program_options
+CXXFLAGS ?= --std=c++11 -Wall -Werror -Wextra -pedantic
 
 ## Target if make is invoked without any parameters (goal)
 .DEFAULT_GOAL: all
@@ -12,7 +11,7 @@ CXXFLAGS ?= -lpulse -lboost_program_options -Wall
 all: pamixer
 
 pamixer: pulseaudio.o device.o pamixer.o
-	$(CXX) $^ $(CXXFLAGS) -o $@
+	$(LINK.cc) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 clean:
 	rm -f pulseaudio.o
@@ -21,3 +20,4 @@ clean:
 
 distclean: clean
 	rm -f pamixer
+
