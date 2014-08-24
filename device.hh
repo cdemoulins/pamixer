@@ -32,7 +32,6 @@ public:
     Device(const pa_sink_info* i);
 
 private:
-    double round(double value);
     int percent(pa_cvolume& volume);
 };
 

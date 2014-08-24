@@ -31,9 +31,6 @@ Device::Device(const pa_sink_info* i) {
 }
 
 
-double
-Device::round(double value) {
-    return (value > 0.0) ? floor(value + 0.5) : ceil(value - 0.5);
 }
 
 int
