@@ -106,7 +106,7 @@ public:
      * @param device
      * @param new_volume
      */
-    void set_volume(Device& device, int new_volume);
+    void set_volume(Device& device, pa_volume_t new_volume);
 
     /**
      * Change the mute state of a device

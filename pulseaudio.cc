@@ -118,8 +118,11 @@ Pulseaudio::get_default_source() {
 }
 
 void
-Pulseaudio::set_volume(Device& device, int new_volume) {
-    pa_cvolume* new_cvolume = pa_cvolume_set(&device.volume, device.volume.channels, (pa_volume_t) round(fmax(((double)new_volume * PA_VOLUME_NORM) / 100, 0)));
+Pulseaudio::set_volume(Device& device, pa_volume_t new_volume) {
+    if (new_volume > PA_VOLUME_MAX) {
+        new_volume = PA_VOLUME_MAX;
+    }
+    pa_cvolume* new_cvolume = pa_cvolume_set(&device.volume, device.volume.channels, new_volume);
     pa_operation* op;
     if (device.type == SINK)
         op = pa_context_set_sink_volume_by_index(context, device.index, new_cvolume, success_cb, NULL);

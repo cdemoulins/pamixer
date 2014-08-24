@@ -111,24 +111,28 @@ Device get_selected_device(Pulseaudio& pulse, po::variables_map vm, string sink_
     return device;
 }
 
-int
-gammaCorrection(int i, double gamma, int delta) {
+pa_volume_t
+gammaCorrection(pa_volume_t i, double gamma, int delta) {
 	if(gamma == 1.0) {
 		return i;
 	}
 	
 	double j = double(i);
 	double relRelta = double(delta) / 100.0;
+    cout << j << "\n" << flush;
 	
-	j = j / 100.0;
+	j = j / PA_VOLUME_NORM;
 	j = pow(j, (1.0/gamma));
 	
 	j = j + relRelta;
+    if(j < 0.0) {
+        j = 0.0;
+    }
 	
 	j = pow(j, gamma);
-	j = j * 100.0;
-	
-	return int(j + 0.5);
+	j = j * PA_VOLUME_NORM;
+    
+	return (pa_volume_t) round(j);
 }
 
 int
@@ -184,16 +188,33 @@ main(int argc, char* argv[])
         Pulseaudio pulse("pamixer");
         Device device = get_selected_device(pulse, vm, sink_name, source_name);
 
-        if (vm.count("set-volume") || vm.count("increase") || vm.count("decrease")) {
-            int new_value = value;
+        if (vm.count("set-volume")) {
+            if (value < 0) {
+                value = 0;
+            }
+            
+            pa_volume_t new_value = round( (double)value * (double)PA_VOLUME_NORM / 100.0);
+            
+            if (!vm.count("allow-boost") && new_value > PA_VOLUME_NORM) {
+                new_value = PA_VOLUME_NORM;
+            }
+            
+            pulse.set_volume(device, new_value);
+            device = get_selected_device(pulse, vm, sink_name, source_name);
+        }
+        else if (vm.count("increase") || vm.count("decrease")) {
+            pa_volume_t new_value;
+            
             if (vm.count("increase")) {
-                new_value = gammaCorrection(device.volume_percent, gamma,  value);
+                new_value = gammaCorrection(device.volume_avg, gamma,  value);
             } else if (vm.count("decrease")) {
-                new_value = gammaCorrection(device.volume_percent, gamma, -value);
+                new_value = gammaCorrection(device.volume_avg, gamma, -value);
             }
-            if (!vm.count("allow-boost")) {
-                new_value = fmin((double)new_value, 100);
+            
+            if (!vm.count("allow-boost") && new_value > PA_VOLUME_NORM) {
+                new_value = PA_VOLUME_NORM;
             }
+            
             pulse.set_volume(device, new_value);
             device = get_selected_device(pulse, vm, sink_name, source_name);
         }

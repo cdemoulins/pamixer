@@ -25,6 +25,7 @@ public:
     std::string name;
     std::string description;
     pa_cvolume volume;
+    pa_volume_t volume_avg;
     int volume_percent;
     bool mute;
 
@@ -32,7 +33,7 @@ public:
     Device(const pa_sink_info* i);
 
 private:
-    int percent(pa_cvolume& volume);
+    void setVolume(const pa_cvolume* v);
 };
 
 #endif

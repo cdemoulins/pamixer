@@ -2,38 +2,30 @@
 
 #include <cmath>
 
-Device::Device(const pa_source_info* i) {
-    index = i->index;
-    type = SOURCE;
-    name = i->name;
-    description = i->description;
-    volume.channels = i->volume.channels;
-    int n;
-    for (n = 0; n < volume.channels; ++n)
-        volume.values[n] = i->volume.values[n];
-    volume_percent = percent(volume);
 
-    mute = i->mute == 1;
-}
-
-Device::Device(const pa_sink_info* i) {
-    index = i->index;
-    type = SINK;
-    name = i->name;
-    description = i->description;
-    volume.channels = i->volume.channels;
-    int n;
-    for (n = 0; n < volume.channels; ++n)
-        volume.values[n] = i->volume.values[n];
-    volume_percent = percent(volume);
-
-    mute = i->mute == 1;
+Device::Device(const pa_source_info* info) {
+    type            = SOURCE;
+    index           = info->index;
+    name            = info->name;
+    description     = info->description;
+    mute            = info->mute == 1;
+    setVolume(&(info->volume));
 }
 
 
+Device::Device(const pa_sink_info* info) {
+    type            = SINK;
+    index           = info->index;
+    name            = info->name;
+    description     = info->description;
+    mute            = info->mute == 1;
+    setVolume(&(info->volume));
 }
 
-int
-Device::percent(pa_cvolume& volume) {
-    return (int) round(((double) pa_cvolume_avg(&volume) * 100.) / PA_VOLUME_NORM);
+
+void
+Device::setVolume(const pa_cvolume* v) {
+    volume         = *v;
+    volume_avg     = pa_cvolume_avg(v);
+    volume_percent = (int) round( (double)volume_avg * 100. / PA_VOLUME_NORM );
 }
