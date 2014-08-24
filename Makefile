@@ -11,10 +11,13 @@ CXXFLAGS ?= -lpulse -lboost_program_options -Wall
 
 all: pamixer
 
-pamixer: pamixer.cc pulseaudio.hh
-	$(CXX) $(CXXFLAGS) -o $@ pamixer.cc
+pamixer: pulseaudio.o device.o pamixer.o
+	$(CXX) $^ $(CXXFLAGS) -o $@
 
 clean:
-	rm -f pamixer
+	rm -f pulseaudio.o
+	rm -f device.o
+	rm -f pamixer.o
 
 distclean: clean
+	rm -f pamixer
