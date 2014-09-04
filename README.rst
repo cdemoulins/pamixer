@@ -14,7 +14,7 @@ Features
 * Set the volume for the default sink, the default source or any other device
 * List the sinks
 * List the sources
-* Increase / Decrease the volume for a device
+* Increase / Decrease the volume for a device (using gamma correction optionally)
 * Mute or unmute a device
 
 Dependencies
@@ -51,9 +51,10 @@ Installation
           --decrease arg        decrease the volume
           --toggle-mute         switch between mute and unmute
           --mute                set mute
+          --allow-boost         allow volume to go above 100%
+          --gamma arg (=1)      increase/decrease using gamma correction e.g. 2.2
           --unmute              unset mute
           --get-mute            display true if the volume is mute, false otherwise
-          --allow-boost         allow volume to go above 100%
           --list-sinks          list the sinks
           --list-sources        list the sources
 
