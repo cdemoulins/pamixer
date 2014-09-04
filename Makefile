@@ -1,12 +1,26 @@
+LDLIBS   ?= -lpulse -lboost_program_options
+CXXFLAGS ?= --std=c++11 -Wall -Werror -Wextra -pedantic
+PREFIX   ?= /usr/local
 
-CXX = g++
-CXXFLAGS = -lpulse -lboost_program_options -Wall
+## Target if make is invoked without any parameters (goal)
+.DEFAULT_GOAL: all
+
+## "Virtual" targets without actual files to update/create
+.PHONY: all clean distclean install
+
 
 all: pamixer
 
-pamixer: pamixer.cc pulseaudio.hh
-	$(CXX) $(CXXFLAGS) -o $@ pamixer.cc
+pamixer: pulseaudio.o device.o pamixer.o
+	$(LINK.cc) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 clean:
+	rm -f pulseaudio.o
+	rm -f device.o
+	rm -f pamixer.o
+
+distclean: clean
 	rm -f pamixer
 
+install: pamixer
+	install pamixer $(PREFIX)/bin/
