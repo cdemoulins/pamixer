@@ -1,7 +1,7 @@
 # Maintainer: Clément Démoulins <clement@archivel.fr>
 
 pkgname=pamixer
-pkgver=1.2
+pkgver=1.2.1
 pkgrel=1
 pkgdesc="Pulseaudio command-line mixer like amixer"
 arch=('i686' 'x86_64')
@@ -13,7 +13,7 @@ depends=('libpulse' 'boost-libs')
 makedepends=('boost')
 
 source=(https://github.com/cdemoulins/${pkgname}/archive/${pkgver}.tar.gz)
-md5sums=('03745caf8f129870133a732528d46316')
+md5sums=('918488982c5d8314b809a188c2dbe97a')
 
 build() {
   cd "$srcdir/${pkgname}-${pkgver}"
