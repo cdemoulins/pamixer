@@ -122,15 +122,9 @@ Device get_selected_device(Pulseaudio& pulse, po::variables_map vm, string sink_
     return device;
 }
 
-pa_volume_t
-gammaCorrection(pa_volume_t i, double gamma, int delta) {
-    if(gamma == 1.0) {
-        return i;
-    }
-
+pa_volume_t gammaCorrection(pa_volume_t i, double gamma, int delta) {
     double j = double(i);
     double relRelta = double(delta) / 100.0;
-    cout << j << "\n" << flush;
 
     j = j / PA_VOLUME_NORM;
     j = pow(j, (1.0/gamma));
@@ -146,8 +140,7 @@ gammaCorrection(pa_volume_t i, double gamma, int delta) {
     return (pa_volume_t) round(j);
 }
 
-    int
-main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
     string sink_name, source_name;
     int value;
@@ -199,24 +192,15 @@ main(int argc, char* argv[])
         Pulseaudio pulse("pamixer");
         Device device = get_selected_device(pulse, vm, sink_name, source_name);
 
-        if (vm.count("set-volume")) {
+        if (vm.count("set-volume") || vm.count("increase") || vm.count("decrease")) {
             if (value < 0) {
                 value = 0;
             }
 
-            pa_volume_t new_value = round( (double)value * (double)PA_VOLUME_NORM / 100.0);
-
-            if (!vm.count("allow-boost") && new_value > PA_VOLUME_NORM) {
-                new_value = PA_VOLUME_NORM;
-            }
-
-            pulse.set_volume(device, new_value);
-            device = get_selected_device(pulse, vm, sink_name, source_name);
-        }
-        else if (vm.count("increase") || vm.count("decrease")) {
-            pa_volume_t new_value;
-
-            if (vm.count("increase")) {
+            pa_volume_t new_value = 0;
+            if (vm.count("set-volume")) {
+                new_value = round( (double)value * (double)PA_VOLUME_NORM / 100.0);
+            } else if (vm.count("increase")) {
                 new_value = gammaCorrection(device.volume_avg, gamma,  value);
             } else if (vm.count("decrease")) {
                 new_value = gammaCorrection(device.volume_avg, gamma, -value);
