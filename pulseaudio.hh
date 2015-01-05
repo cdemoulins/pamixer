@@ -22,7 +22,9 @@
 #include <pulse/pulseaudio.h>
 #include <string>
 #include <list>
+
 #include "device.hh"
+#include "callbacks.hh"
 
 
 class ServerInfo {
@@ -38,12 +40,6 @@ enum state {
     ERROR
 };
 typedef enum state state_t;
-
-void state_cb(pa_context* context, void* raw);
-void sink_list_cb(pa_context *c, const pa_sink_info *i, int eol, void *userdata);
-void source_list_cb(pa_context *c, const pa_source_info *i, int eol, void *userdata);
-void server_info_cb(pa_context* context, const pa_server_info* i, void* raw);
-void success_cb(pa_context* context, int success, void* raw);
 
 
 /**

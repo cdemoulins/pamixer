@@ -30,74 +30,12 @@ using namespace std;
 #include <pulse/pulseaudio.h>
 
 
-#ifdef UNUSED
-#elif defined(__GNUC__)
-# define UNUSED(x) UNUSED_ ## x __attribute__((unused))
-#elif defined(__LCLINT__)
-# define UNUSED(x) /*@unused@*/ x
-#else
-# define UNUSED(x) x
-#endif
 
-
-void state_cb(pa_context* context, void* raw);
-void sink_list_cb(pa_context *c, const pa_sink_info *i, int eol, void *raw);
-void source_list_cb(pa_context *c, const pa_source_info *i, int eol, void *raw);
-void server_info_cb(pa_context* context, const pa_server_info* i, void* raw);
-void success_cb(pa_context* context, int success, void* raw);
 void conflicting_options(const po::variables_map& vm, const char* opt1, const char* opt2);
 Device get_selected_device(Pulseaudio& pulse, po::variables_map vm, string sink_name, string source_name);
 int gammaCorrection(int i, double gamma, int delta);
 int main(int argc, char* argv[]);
 
-/////////////////////////////////////////////////
-// Callback functions
-
-void state_cb(pa_context* context, void* raw) {
-    Pulseaudio* pulse = (Pulseaudio*) raw;
-    switch(pa_context_get_state(context))
-    {
-        case PA_CONTEXT_READY:
-            pulse->state = CONNECTED;
-            break;
-        case PA_CONTEXT_FAILED:
-            pulse->state = ERROR;
-            break;
-        case PA_CONTEXT_UNCONNECTED:
-        case PA_CONTEXT_AUTHORIZING:
-        case PA_CONTEXT_SETTING_NAME:
-        case PA_CONTEXT_CONNECTING:
-        case PA_CONTEXT_TERMINATED:
-            break;
-    }
-}
-
-void sink_list_cb(pa_context * UNUSED(c), const pa_sink_info *i, int eol, void *raw) {
-    if (eol != 0) return;
-
-    std::list<Device>* sinks = (std::list<Device>*) raw;
-    Device s(i);
-    sinks->push_back(s);
-}
-
-void source_list_cb(pa_context * UNUSED(c), const pa_source_info *i, int eol, void *raw) {
-    if (eol != 0) return;
-
-    std::list<Device>* sources = (std::list<Device>*) raw;
-    Device s(i);
-    sources->push_back(s);
-}
-
-void server_info_cb(pa_context* UNUSED(context), const pa_server_info* i, void* raw) {
-    ServerInfo* info = (ServerInfo*) raw;
-    info->default_sink_name = i->default_sink_name;
-    info->default_source_name = i->default_source_name;
-}
-
-void success_cb(pa_context* UNUSED(context), int UNUSED(success), void* UNUSED(raw)) {
-}
-
-/////////////////////////////////////////////////
 
 
 /* Function used to check that 'opt1' and 'opt2' are not specified

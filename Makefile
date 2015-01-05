@@ -11,7 +11,7 @@ PREFIX   ?= /usr/local
 
 all: pamixer
 
-pamixer: pulseaudio.o device.o pamixer.o
+pamixer: pulseaudio.o device.o pamixer.o callbacks.o
 	$(LINK.cc) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 clean:
