@@ -18,6 +18,7 @@ clean:
 	rm -f pulseaudio.o
 	rm -f device.o
 	rm -f pamixer.o
+	rm -f callbacks.o
 
 distclean: clean
 	rm -f pamixer
