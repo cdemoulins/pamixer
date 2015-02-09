@@ -19,6 +19,11 @@
 #include "pulseaudio.hh"
 #include <cmath>
 
+// Fix issue #7
+#ifndef UINT32_MAX
+#include <limits>
+#define UINT32_MAX std::numeric_limits<uint32_t>::max()
+#endif
 
 
 
