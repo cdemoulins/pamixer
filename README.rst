@@ -30,7 +30,7 @@ Installation
 
     * Get the source::
 
-        git clone https://cdemoulins@github.com/cdemoulins/pamixer.git
+        git clone https://github.com/cdemoulins/pamixer.git
 
     * Compile::
 
