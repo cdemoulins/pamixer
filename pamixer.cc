@@ -191,6 +191,7 @@ int main(int argc, char* argv[])
     catch (const char* message)
     {
         cerr << message << endl;
+        return 3;
     }
     catch (const po::unknown_option opt)
     {
