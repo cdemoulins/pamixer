@@ -104,29 +104,29 @@ int main(int argc, char* argv[])
         ("list-sources", "list the sources")
         ;
 
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, options), vm);
-    po::notify(vm);
-
-    if (vm.count("help") || vm.size() == 0) {
-        cout << options << endl;
-        return 0;
-    }
-
-    conflicting_options(vm, "set-volume", "increase");
-    conflicting_options(vm, "set-volume", "decrease");
-    conflicting_options(vm, "decrease", "increase");
-    conflicting_options(vm, "toggle-mute", "mute");
-    conflicting_options(vm, "toggle-mute", "unmute");
-    conflicting_options(vm, "unmute", "mute");
-    conflicting_options(vm, "sink", "source");
-    conflicting_options(vm, "sink", "default-source");
-    conflicting_options(vm, "get-volume", "get-mute");
-    conflicting_options(vm, "get-volume", "list-sinks");
-    conflicting_options(vm, "get-volume", "list-sources");
-
     try
     {
+        po::variables_map vm;
+        po::store(po::parse_command_line(argc, argv, options), vm);
+        po::notify(vm);
+
+        if (vm.count("help") || vm.size() < 2) {
+            cout << options << endl;
+            return 0;
+        }
+
+        conflicting_options(vm, "set-volume", "increase");
+        conflicting_options(vm, "set-volume", "decrease");
+        conflicting_options(vm, "decrease", "increase");
+        conflicting_options(vm, "toggle-mute", "mute");
+        conflicting_options(vm, "toggle-mute", "unmute");
+        conflicting_options(vm, "unmute", "mute");
+        conflicting_options(vm, "sink", "source");
+        conflicting_options(vm, "sink", "default-source");
+        conflicting_options(vm, "get-volume", "get-mute");
+        conflicting_options(vm, "get-volume", "list-sinks");
+        conflicting_options(vm, "get-volume", "list-sources");
+
         Pulseaudio pulse("pamixer");
         Device device = get_selected_device(pulse, vm, sink_name, source_name);
 
@@ -191,5 +191,11 @@ int main(int argc, char* argv[])
     catch (const char* message)
     {
         cerr << message << endl;
+    }
+    catch (const po::unknown_option opt)
+    {
+        cerr << opt.what() << endl << endl;
+        cerr << options << endl;
+        return 2;
     }
 }
