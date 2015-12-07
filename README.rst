@@ -42,8 +42,8 @@ Installation
 
         Allowed options:
           -h [ --help ]         help message
-          -s [ --sink ] arg     choose a different sink than the default
-          -s [ --source ] arg   choose a different source than the default
+          --sink arg            choose a different sink than the default
+          --source arg          choose a different source than the default
           --default-source      select the default source
           --get-volume          get the current volume
           --set-volume arg      set the volume
@@ -57,4 +57,3 @@ Installation
           --get-mute            display true if the volume is mute, false otherwise
           --list-sinks          list the sinks
           --list-sources        list the sources
-
