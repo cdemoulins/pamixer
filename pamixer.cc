@@ -193,9 +193,9 @@ int main(int argc, char* argv[])
         cerr << message << endl;
         return 3;
     }
-    catch (const po::unknown_option opt)
+    catch (const std::exception& e)
     {
-        cerr << opt.what() << endl << endl;
+        cerr << argv[0] << ": " << e.what() << endl << endl;
         cerr << options << endl;
         return 2;
     }
