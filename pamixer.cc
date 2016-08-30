@@ -123,7 +123,6 @@ int main(int argc, char* argv[])
         conflicting_options(vm, "unmute", "mute");
         conflicting_options(vm, "sink", "source");
         conflicting_options(vm, "sink", "default-source");
-        conflicting_options(vm, "get-volume", "get-mute");
         conflicting_options(vm, "get-volume", "list-sinks");
         conflicting_options(vm, "get-volume", "list-sources");
 
@@ -161,7 +160,10 @@ int main(int argc, char* argv[])
         }
 
         int ret = 0;
-        if (vm.count("get-volume")) {
+        if (vm.count("get-volume") && vm.count("get-mute")) {
+            cout << boolalpha << device.mute << " " << device.volume_percent << "\n" << flush;
+            ret = (device.mute ? 0 : 1);
+        } else if (vm.count("get-volume")) {
             cout << device.volume_percent << "\n" << flush;
             ret = (device.volume_percent > 0 ? 0 : 1);
         } else if (vm.count("get-mute")) {
