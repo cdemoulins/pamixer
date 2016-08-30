@@ -125,6 +125,8 @@ int main(int argc, char* argv[])
         conflicting_options(vm, "sink", "default-source");
         conflicting_options(vm, "get-volume", "list-sinks");
         conflicting_options(vm, "get-volume", "list-sources");
+        conflicting_options(vm, "get-mute", "list-sinks");
+        conflicting_options(vm, "get-mute", "list-sources");
 
         Pulseaudio pulse("pamixer");
         Device device = get_selected_device(pulse, vm, sink_name, source_name);
