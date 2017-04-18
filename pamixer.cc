@@ -163,29 +163,29 @@ int main(int argc, char* argv[])
 
         int ret = 0;
         if (vm.count("get-volume") && vm.count("get-mute")) {
-            cout << boolalpha << device.mute << " " << device.volume_percent << "\n" << flush;
-            ret = (device.mute ? 0 : 1);
+            cout << boolalpha << device.mute << ' ' << device.volume_percent << '\n';
+            ret = !device.mute;
         } else if (vm.count("get-volume")) {
-            cout << device.volume_percent << "\n" << flush;
-            ret = (device.volume_percent > 0 ? 0 : 1);
+            cout << device.volume_percent << '\n';
+            ret = device.volume_percent <= 0;
         } else if (vm.count("get-mute")) {
-            cout << boolalpha << device.mute << "\n" << flush;
-            ret = (device.mute ? 0 : 1);
+            cout << boolalpha << device.mute << '\n';
+            ret = !device.mute;
         } else {
             if (vm.count("list-sinks")) {
-                list<Device> sinks = pulse.get_sinks();
-                list<Device>::iterator it;
-                cout << "Sinks:" << endl;
-                for (it = sinks.begin(); it != sinks.end(); ++it) {
-                    cout << it->index << " \"" << it->name << "\" \"" << it->description << "\"" << endl;
+                cout << "Sinks:\n";
+                for (const Device& sink : pulse.get_sinks()) {
+                    cout << sink.index << " \""
+                         << sink.name << "\" \""
+                         << sink.description << "\"\n";
                 }
             }
             if (vm.count("list-sources")) {
-                list<Device> sources = pulse.get_sources();
-                list<Device>::iterator it;
-                cout << "Sources:" << endl;
-                for (it = sources.begin(); it != sources.end(); ++it) {
-                    cout << it->index << " \"" << it->name << "\" \"" << it->description << "\"" << endl;
+                cout << "Sources:\n";
+                for (const Device& source : pulse.get_sources()) {
+                    cout << source.index << " \""
+                         << source.name << "\" \""
+                         << source.description << "\"\n";
                 }
             }
         }
@@ -194,13 +194,13 @@ int main(int argc, char* argv[])
     }
     catch (const char* message)
     {
-        cerr << message << endl;
+        cerr << message << '\n';
         return 3;
     }
     catch (const std::exception& e)
     {
-        cerr << argv[0] << ": " << e.what() << endl << endl;
-        cerr << options << endl;
+        cerr << argv[0] << ": " << e.what() << "\n\n";
+        cerr << options << '\n';
         return 2;
     }
 }
