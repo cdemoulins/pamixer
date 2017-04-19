@@ -153,12 +153,13 @@ int main(int argc, char* argv[])
             device = get_selected_device(pulse, vm, sink_name, source_name);
         }
 
-        if (vm.count("toggle-mute")) {
-            pulse.set_mute(device, !device.mute);
-        } else if (vm.count("mute")) {
-            pulse.set_mute(device, true);
-        } else if (vm.count("unmute")) {
-            pulse.set_mute(device, false);
+        if (vm.count("toggle-mute") || vm.count("mute") || vm.count("unmute")) {
+            if (vm.count("toggle-mute")) {
+                pulse.set_mute(device, !device.mute);
+            } else {
+                pulse.set_mute(device, vm.count("mute") || !vm.count("unmute"));
+            }
+            device = get_selected_device(pulse, vm, sink_name, source_name);
         }
 
         int ret = 0;
