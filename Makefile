@@ -1,6 +1,11 @@
 LDLIBS   ?= -lpulse -lboost_program_options
-CXXFLAGS ?= --std=c++11 -Wall -Werror -Wextra -pedantic
+CXXFLAGS ?= -std=c++11 -Wall -Werror -Wextra -pedantic
 PREFIX   ?= /usr/local
+RM       ?= rm -f
+
+target   := pamixer
+main     := $(addsuffix .cc,$(target))
+objects  := $(addsuffix .o,callbacks device pulseaudio)
 
 ## Target if make is invoked without any parameters (goal)
 .DEFAULT_GOAL: all
@@ -9,19 +14,15 @@ PREFIX   ?= /usr/local
 .PHONY: all clean distclean install
 
 
-all: pamixer
+all: $(target)
 
-pamixer: pulseaudio.o device.o pamixer.o callbacks.o
-	$(LINK.cc) $^ $(LOADLIBES) $(LDLIBS) -o $@
+$(target): $(main) $(objects)
 
 clean:
-	rm -f pulseaudio.o
-	rm -f device.o
-	rm -f pamixer.o
-	rm -f callbacks.o
+	$(RM) $(objects)
 
 distclean: clean
-	rm -f pamixer
+	$(RM) $(target)
 
 install: pamixer
-	install pamixer $(PREFIX)/bin/
+	install $(target) $(PREFIX)/bin/
