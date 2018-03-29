@@ -41,13 +41,14 @@ Pulseaudio::Pulseaudio(std::string client_name) {
     pa_context_set_state_callback(context, &state_cb, this);
 
     state = CONNECTING;
-    pa_context_connect(context, NULL, PA_CONTEXT_NOFLAGS, NULL);
-    while (state == CONNECTING) {
-        pa_mainloop_iterate(mainloop, 1, &retval);
-    }
-    if (state == ERROR) {
+    if (pa_context_connect(context, NULL, PA_CONTEXT_NOFLAGS, NULL) < 0)
         throw "Connection error\n";
+    while (state == CONNECTING) {
+        if (pa_mainloop_iterate(mainloop, 1, &retval) < 0)
+            throw "Mainloop error\n";
     }
+    if (state == ERROR)
+        throw "Connection error\n";
 }
 
 Pulseaudio::~Pulseaudio() {
