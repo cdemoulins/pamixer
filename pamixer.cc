@@ -180,7 +180,7 @@ int main(int argc, char* argv[])
             } else {
                 cout << device.volume_percent << "%\n";
             }
-            ret = device.volume_percent <= 0;
+            ret = (device.volume_percent <= 0) || device.mute;
         } else if (vm.count("get-mute")) {
             cout << boolalpha << device.mute << '\n';
             ret = !device.mute;
