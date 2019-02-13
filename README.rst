@@ -46,6 +46,7 @@ Installation
           --source arg          choose a different source than the default
           --default-source      select the default source
           --get-volume          get the current volume
+          --get-volume-human    get the current volume percentage or the string "muted"
           --set-volume arg      set the volume
           -i [ --increase ] arg increase the volume
           -d [ --decrease ] arg decrease the volume

@@ -91,6 +91,7 @@ int main(int argc, char* argv[])
         ("source", po::value(&source_name), "choose a different source than the default")
         ("default-source", "select the default source")
         ("get-volume", "get the current volume")
+        ("get-volume-human", "get the current volume percentage or the string \"muted\"")
         ("set-volume", po::value<int>(&value), "set the volume")
         ("increase,i", po::value<int>(&value), "increase the volume")
         ("decrease,d", po::value<int>(&value), "decrease the volume")
@@ -125,6 +126,10 @@ int main(int argc, char* argv[])
         conflicting_options(vm, "sink", "default-source");
         conflicting_options(vm, "get-volume", "list-sinks");
         conflicting_options(vm, "get-volume", "list-sources");
+        conflicting_options(vm, "get-volume", "get-volume-human");
+        conflicting_options(vm, "get-volume-human", "list-sinks");
+        conflicting_options(vm, "get-volume-human", "list-sources");
+        conflicting_options(vm, "get-volume-human", "get-mute");
         conflicting_options(vm, "get-mute", "list-sinks");
         conflicting_options(vm, "get-mute", "list-sources");
 
@@ -169,6 +174,13 @@ int main(int argc, char* argv[])
         } else if (vm.count("get-volume")) {
             cout << device.volume_percent << '\n';
             ret = device.volume_percent <= 0;
+        } else if (vm.count("get-volume-human")) {
+            if (device.mute) {
+                cout << "muted\n";
+            } else {
+                cout << device.volume_percent << "%\n";
+            }
+            ret = (device.volume_percent <= 0) || device.mute;
         } else if (vm.count("get-mute")) {
             cout << boolalpha << device.mute << '\n';
             ret = !device.mute;
