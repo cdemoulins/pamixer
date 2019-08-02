@@ -151,19 +151,25 @@ int main(int argc, char* argv[])
                 new_value = gammaCorrection(device.volume_avg, gamma, -value);
             }
 
-            if (vm.count("set-limit")) {
-                pa_volume_t limit = round( (double)limit_value * (double)PA_VOLUME_NORM / 100.0);
-                if (new_value > limit) {
-                    new_value = limit;
-                }
-            }
-
             if (!vm.count("allow-boost") && new_value > PA_VOLUME_NORM) {
                 new_value = PA_VOLUME_NORM;
             }
 
             pulse.set_volume(device, new_value);
             device = get_selected_device(pulse, vm, sink_name, source_name);
+        }
+
+        if (vm.count("set-limit")) {
+
+            if (limit_value < 0 ) {
+                limit_value = 0;
+            }
+
+            pa_volume_t limit = round( (double)limit_value * (double)PA_VOLUME_NORM / 100.0);
+            if (device.volume_avg > limit) {
+                pulse.set_volume(device, limit);
+                device = get_selected_device(pulse, vm, sink_name, source_name);
+            }
         }
 
         if (vm.count("toggle-mute") || vm.count("mute") || vm.count("unmute")) {
