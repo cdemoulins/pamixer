@@ -84,7 +84,7 @@ Pulseaudio::get_sink(uint32_t index) {
     iterate(op);
     pa_operation_unref(op);
 
-    if (sinks.empty()) throw "The sink doesn't exit\n";
+    if (sinks.empty()) throw "The sink doesn't exist\n";
     return *(sinks.begin());
 }
 
@@ -95,7 +95,7 @@ Pulseaudio::get_sink(std::string name) {
     iterate(op);
     pa_operation_unref(op);
 
-    if (sinks.empty()) throw "The sink doesn't exit\n";
+    if (sinks.empty()) throw "The sink doesn't exist\n";
     return *(sinks.begin());
 }
 
@@ -106,7 +106,7 @@ Pulseaudio::get_source(uint32_t index) {
     iterate(op);
     pa_operation_unref(op);
 
-    if (sources.empty()) throw "The source doesn't exit\n";
+    if (sources.empty()) throw "The source doesn't exist\n";
     return *(sources.begin());
 }
 
@@ -117,7 +117,7 @@ Pulseaudio::get_source(std::string name) {
     iterate(op);
     pa_operation_unref(op);
 
-    if (sources.empty()) throw "The source doesn't exit\n";
+    if (sources.empty()) throw "The source doesn't exist\n";
     return *(sources.begin());
 }
 
