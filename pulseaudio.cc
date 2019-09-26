@@ -52,8 +52,10 @@ Pulseaudio::Pulseaudio(std::string client_name) {
 }
 
 Pulseaudio::~Pulseaudio() {
+    pa_context_set_state_callback(context, NULL, NULL);
     if (state == CONNECTED)
         pa_context_disconnect(context);
+    pa_context_unref(context);
     pa_mainloop_free(mainloop);
 }
 
