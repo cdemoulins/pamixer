@@ -4,6 +4,7 @@ PREFIX   ?= /usr/local
 RM       ?= rm -f
 
 target   := pamixer
+manpage  := pamixer.1
 main     := $(addsuffix .cc,$(target))
 objects  := $(addsuffix .o,callbacks device pulseaudio)
 
@@ -26,3 +27,5 @@ distclean: clean
 
 install: pamixer
 	install $(target) $(PREFIX)/bin/
+	install $(manpage) $(PREFIX)/man/man1/
+	gzip $(PREFIX)/man/man1/$(manpage)
