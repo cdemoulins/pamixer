@@ -1,0 +1,115 @@
+.TH pamixer 1
+
+.SH NAME
+pamixer \- Pulseaudio command line mixer
+
+.SH SYNOPSIS
+.B pamixer
+[OPTIONS]
+
+.SH DESCRIPTION
+.B pamixer
+controls the volume levels of Pulseaudio sinks.
+
+.SH OPTIONS
+.TP
+.B "\-h, \-\-help"
+.br
+Show help message.
+
+.TP
+.BI \-\-sink " INDEX"
+.br
+Choose a different sink than the default.
+
+.TP
+.BI \-\-source " INDEX"
+.br
+Choose a different source than the default.
+
+.TP
+.B \-\-default-source
+.br
+Select the default source.
+
+.TP
+.B \-\-get-volume
+.br
+Get the current volume.
+
+.TP
+.B \-\-get-volume-human
+.br
+Get the current volume percentage or the string "muted".
+
+.TP
+.BI \-\-set-volume " PERCENTAGE"
+.br
+Set the volume.
+
+.TP
+.BI "\-i, \-\-increase" " PERCENTAGE"
+.br
+Increase the volume.
+
+.TP
+.BI "\-d, \-\-decrease" " PERCENTAGE"
+.br
+Decrease the volume.
+
+.TP
+.B "\-t, \-\-toggle-mute"
+.br
+Switch between mute and unmute.
+
+.TP
+.BI "\-m, \-\-mute"
+.hr
+Set mute.
+
+.TP
+.BI \-\-allow-boost
+.br
+Allow volume to go above 100%.
+
+.TP
+.BI \-\-gamma " AMOUNT"
+.br
+Increase/decrease using gamma correction e.g. 2.2.
+
+.TP
+.B "\-u, \-\-unmute"
+.br
+Unset mute.
+
+.TP
+.B \-\-get-mute
+.br
+Display true if the volume is mute, false otherwise.
+
+.TP
+.B \-\-list-sinks
+.br
+List the sinks.
+
+.TP
+.B \-\-list-sources
+.br
+List the sources.
+
+.SH EXAMPLES
+.TP
+.B "pamixer -d 5"
+Will decrease the volume by 5% on the default sink.
+
+.TP
+.B "pamixer --source 2 -m"
+Will mute source 2.
+
+.SH SEE ALSO
+.BR amixer (1),
+.BR alsamixer (1)
+
+
+.SH COPYRIGHT
+Copyright \(co 2011 - 2019 Clément Démoulins <clement@archivel.fr>.
