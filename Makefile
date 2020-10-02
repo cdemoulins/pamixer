@@ -26,6 +26,8 @@ distclean: clean
 	$(RM) $(target)
 
 install: pamixer
-	install $(target) $(PREFIX)/bin/
-	install $(manpage) $(PREFIX)/man/man1/
-	gzip $(PREFIX)/man/man1/$(manpage)
+	install -d $(DESTDIR)$(PREFIX)/bin/
+	install $(target) $(DESTDIR)$(PREFIX)/bin/
+	install -d $(DESTDIR)$(PREFIX)/man/man1/
+	install $(manpage) $(DESTDIR)$(PREFIX)/man/man1/
+	gzip $(DESTDIR)$(PREFIX)/man/man1/$(manpage)
