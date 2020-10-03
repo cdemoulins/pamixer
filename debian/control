@@ -1,0 +1,16 @@
+Source: pamixer
+Section: sound
+Priority: optional
+Maintainer: Michael Gebetsroither <michael@mgeb.org>
+Build-Depends: debhelper-compat (= 12), libpulse-dev
+Standards-Version: 4.5.0
+Homepage: https://github.com/cdemoulins/pamixer
+Vcs-Browser: https://github.com/cdemoulins/pamixer
+Vcs-Git: https://github.com/cdemoulins/pamixer
+
+Package: pamixer
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: pulseaudio command line mixer
+ pamixer is like amixer but for pulseaudio.
+ It can control the volume levels of the sinks.

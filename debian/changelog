@@ -1,0 +1,5 @@
+pamixer (1.4) unstable; urgency=medium
+
+  * build debian package, native package without ITP
+
+ -- Michael Gebetsroither <michael@mgeb.org>  Sat, 03 Oct 2020 01:25:00 +0200
