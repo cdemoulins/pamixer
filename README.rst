@@ -53,6 +53,7 @@ Installation
           -t [ --toggle-mute ]  switch between mute and unmute
           -m [ --mute ]         set mute
           --allow-boost         allow volume to go above 100%
+          --set-limit arg       set a limit for the volume
           --gamma arg (=1)      increase/decrease using gamma correction e.g. 2.2
           -u [ --unmute ]       unset mute
           --get-mute            display true if the volume is mute, false otherwise

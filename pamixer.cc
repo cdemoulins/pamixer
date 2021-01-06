@@ -81,7 +81,7 @@ pa_volume_t gammaCorrection(pa_volume_t i, double gamma, int delta) {
 int main(int argc, char* argv[])
 {
     string sink_name, source_name;
-    int value;
+    int value, limit_value;
     double gamma;
 
     po::options_description options("Allowed options");
@@ -98,6 +98,7 @@ int main(int argc, char* argv[])
         ("toggle-mute,t", "switch between mute and unmute")
         ("mute,m", "set mute")
         ("allow-boost", "allow volume to go above 100%")
+        ("set-limit", po::value<int>(&limit_value), "set a limit for the volume")
         ("gamma", po::value<double>(&gamma)->default_value(1.0), "increase/decrease using gamma correction e.g. 2.2")
         ("unmute,u", "unset mute")
         ("get-mute", "display true if the volume is mute, false otherwise")
@@ -156,6 +157,19 @@ int main(int argc, char* argv[])
 
             pulse.set_volume(device, new_value);
             device = get_selected_device(pulse, vm, sink_name, source_name);
+        }
+
+        if (vm.count("set-limit")) {
+
+            if (limit_value < 0 ) {
+                limit_value = 0;
+            }
+
+            pa_volume_t limit = round( (double)limit_value * (double)PA_VOLUME_NORM / 100.0);
+            if (device.volume_avg > limit) {
+                pulse.set_volume(device, limit);
+                device = get_selected_device(pulse, vm, sink_name, source_name);
+            }
         }
 
         if (vm.count("toggle-mute") || vm.count("mute") || vm.count("unmute")) {
