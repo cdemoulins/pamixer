@@ -104,6 +104,7 @@ int main(int argc, char* argv[])
         ("get-mute", "display true if the volume is mute, false otherwise")
         ("list-sinks", "list the sinks")
         ("list-sources", "list the sources")
+        ("get-default-sink", "print the default sink")
         ;
 
     try
@@ -128,11 +129,14 @@ int main(int argc, char* argv[])
         conflicting_options(vm, "get-volume", "list-sinks");
         conflicting_options(vm, "get-volume", "list-sources");
         conflicting_options(vm, "get-volume", "get-volume-human");
+        conflicting_options(vm, "get-volume", "get-default-sink");
         conflicting_options(vm, "get-volume-human", "list-sinks");
         conflicting_options(vm, "get-volume-human", "list-sources");
         conflicting_options(vm, "get-volume-human", "get-mute");
+        conflicting_options(vm, "get-volume-human", "get-default-sink");
         conflicting_options(vm, "get-mute", "list-sinks");
         conflicting_options(vm, "get-mute", "list-sources");
+        conflicting_options(vm, "get-mute", "get-default-sink");
 
         Pulseaudio pulse("pamixer");
         Device device = get_selected_device(pulse, vm, sink_name, source_name);
@@ -214,6 +218,13 @@ int main(int argc, char* argv[])
                          << source.name << "\" \""
                          << source.description << "\"\n";
                 }
+            }
+            if (vm.count("get-default-sink")) {
+                Device sink = pulse.get_default_sink();
+                cout << "Default sink:\n";
+                cout << sink.index << " \""
+                     << sink.name << "\" \""
+                     << sink.description << "\"\n";
             }
         }
 
