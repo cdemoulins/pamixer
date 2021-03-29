@@ -23,6 +23,8 @@ Dependencies
 * libpulse
 * boost-program_options
 
+You need the headers as well (“-dev” packages for Debian).
+
 Installation
 ------------
 
