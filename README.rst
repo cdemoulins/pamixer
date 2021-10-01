@@ -44,6 +44,7 @@ Installation
 
         Allowed options:
           -h [ --help ]         help message
+          -v [ --version ]      print version info
           --sink arg            choose a different sink than the default
           --source arg          choose a different source than the default
           --default-source      select the default source

@@ -87,6 +87,7 @@ int main(int argc, char* argv[])
     po::options_description options("Allowed options");
     options.add_options()
         ("help,h", "help message")
+        ("version,v", "print version info")
         ("sink", po::value(&sink_name), "choose a different sink than the default")
         ("source", po::value(&source_name), "choose a different source than the default")
         ("default-source", "select the default source")
@@ -115,6 +116,11 @@ int main(int argc, char* argv[])
 
         if (vm.count("help") || vm.size() < 2) {
             cout << options << endl;
+            return 0;
+        }
+
+        if (vm.count("version")) {
+            cout << VERSION << endl;
             return 0;
         }
 
