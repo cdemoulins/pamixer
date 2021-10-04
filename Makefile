@@ -1,6 +1,5 @@
-GIT_VERSION := "$(shell git describe --abbrev=4 --dirty --always --tags)"
 LDLIBS   ?= -lpulse -lboost_program_options
-CXXFLAGS ?= -std=c++11 -Wall -Werror -Wextra -pedantic -DVERSION=\"$(GIT_VERSION)\"
+CXXFLAGS ?= -std=c++11 -Wall -Werror -Wextra -pedantic -DVERSION=\"1.5\"
 PREFIX   ?= /usr/local
 RM       ?= rm -f
 
