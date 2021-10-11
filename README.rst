@@ -36,11 +36,12 @@ Installation
 
     * Compile::
 
-        make
+        meson setup build
+        meson compile -C build
 
-    * And use it, no install command for now::
+    * And use it::
 
-        ./pamixer --help
+        ./build/pamixer --help
 
         Allowed options:
           -h [ --help ]         help message
@@ -62,3 +63,8 @@ Installation
           --get-mute            display true if the volume is mute, false otherwise
           --list-sinks          list the sinks
           --list-sources        list the sources
+
+    * Or install it::
+
+        meson install -C build
+
