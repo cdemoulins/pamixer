@@ -192,23 +192,18 @@ int main(int argc, char* argv[])
             device = get_selected_device(pulse, vm, sink_name, source_name);
         }
 
-        int ret = 0;
         if (vm.count("get-volume") && vm.count("get-mute")) {
             cout << boolalpha << device.mute << ' ' << device.volume_percent << '\n';
-            ret = !device.mute;
         } else if (vm.count("get-volume")) {
             cout << device.volume_percent << '\n';
-            ret = device.volume_percent <= 0;
         } else if (vm.count("get-volume-human")) {
             if (device.mute) {
                 cout << "muted\n";
             } else {
                 cout << device.volume_percent << "%\n";
             }
-            ret = (device.volume_percent <= 0) || device.mute;
         } else if (vm.count("get-mute")) {
             cout << boolalpha << device.mute << '\n';
-            ret = !device.mute;
         } else {
             if (vm.count("list-sinks")) {
                 cout << "Sinks:\n";
@@ -235,7 +230,7 @@ int main(int argc, char* argv[])
             }
         }
 
-        return ret;
+        return 0;
     }
     catch (const char* message)
     {
