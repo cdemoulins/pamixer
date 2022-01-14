@@ -61,6 +61,17 @@ Device get_selected_device(Pulseaudio& pulse, po::variables_map vm, string sink_
     return device;
 }
 
+string device_state_to_string(Device device) {
+    string state;
+    switch(device.state) {
+        case DEVICE_RUNNING: state = string("Running"); break;
+        case DEVICE_IDLE: state = string("Idle"); break;
+        case DEVICE_SUSPENDED: state = string("Suspended"); break;
+        default: state = string("Invalid state");
+    }
+    return state;
+}
+
 pa_volume_t gammaCorrection(pa_volume_t i, double gamma, int delta) {
     double j = double(i);
     double relRelta = double(delta) / 100.0;
@@ -210,6 +221,7 @@ int main(int argc, char* argv[])
                 for (const Device& sink : pulse.get_sinks()) {
                     cout << sink.index << " \""
                          << sink.name << "\" \""
+                         << device_state_to_string(sink) << "\" \""
                          << sink.description << "\"\n";
                 }
             }
@@ -218,6 +230,7 @@ int main(int argc, char* argv[])
                 for (const Device& source : pulse.get_sources()) {
                     cout << source.index << " \""
                          << source.name << "\" \""
+                         << device_state_to_string(source) << "\" \""
                          << source.description << "\"\n";
                 }
             }

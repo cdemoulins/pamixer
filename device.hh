@@ -29,6 +29,13 @@ enum device_type {
 };
 typedef enum device_type device_type_t;
 
+enum device_state {
+    DEVICE_INVALID_STATE,
+    DEVICE_RUNNING,
+    DEVICE_IDLE,
+    DEVICE_SUSPENDED
+};
+typedef enum device_state device_state_t;
 
 /**
  * Class to store device (sink or source) related informations
@@ -42,6 +49,7 @@ public:
     device_type_t type;
     std::string name;
     std::string description;
+    device_state_t state;
     pa_cvolume volume;
     pa_volume_t volume_avg;
     int volume_percent;

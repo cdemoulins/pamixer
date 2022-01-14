@@ -27,6 +27,12 @@ Device::Device(const pa_source_info* info) {
     name            = info->name;
     description     = info->description;
     mute            = info->mute == 1;
+    switch(info->state) {
+        case PA_SOURCE_RUNNING: state = DEVICE_RUNNING; break;
+        case PA_SOURCE_IDLE: state = DEVICE_IDLE; break;
+        case PA_SOURCE_SUSPENDED: state = DEVICE_SUSPENDED; break;
+        default: state = DEVICE_INVALID_STATE;
+    }
     setVolume(&(info->volume));
 }
 
@@ -37,6 +43,12 @@ Device::Device(const pa_sink_info* info) {
     name            = info->name;
     description     = info->description;
     mute            = info->mute == 1;
+    switch(info->state) {
+        case PA_SINK_RUNNING: state = DEVICE_RUNNING; break;
+        case PA_SINK_IDLE: state = DEVICE_IDLE; break;
+        case PA_SINK_SUSPENDED: state = DEVICE_SUSPENDED; break;
+        default: state = DEVICE_INVALID_STATE;
+    }
     setVolume(&(info->volume));
 }
 
