@@ -18,6 +18,7 @@
 
 #include "pulseaudio.hh"
 #include <cmath>
+#include <unistd.h>
 
 // Fix issue #7
 #ifndef UINT32_MAX
@@ -31,6 +32,7 @@ void
 Pulseaudio::iterate(pa_operation* op) {
     while (pa_operation_get_state(op) == PA_OPERATION_RUNNING) {
         pa_mainloop_iterate(mainloop, 1, &retval);
+        usleep(100);
     }
 }
 
