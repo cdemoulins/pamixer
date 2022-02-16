@@ -8,12 +8,12 @@ configure_file(output : 'config.hh', configuration : conf_data)
 configuration_inc = include_directories('.')
 
 pulse = dependency('libpulse')
-boost = dependency('boost', modules : 'program_options')
+cxxopts = dependency('cxxopts')
 
 executable('pamixer', 
   sources : src,
   install : true,
   include_directories : configuration_inc,
-  dependencies : [pulse, boost])
+  dependencies : [pulse, cxxopts])
 
 install_man('pamixer.1')
