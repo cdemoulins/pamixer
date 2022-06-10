@@ -4,3 +4,4 @@
 /archlinux/**/pkg
 *.xz
 *.gz
+.cache
