@@ -1,4 +1,4 @@
-project('pamixer', 'cpp', version : '1.6-dev',
+project('pamixer', 'cpp', version : '1.6',
   default_options : ['cpp_std=c++11'])
 
 src = files([
