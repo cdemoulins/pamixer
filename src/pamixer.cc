@@ -118,6 +118,7 @@ int main(int argc, char* argv[])
         ("list-sinks", "list the sinks")
         ("list-sources", "list the sources")
         ("get-default-sink", "print the default sink")
+	("get-default-source", "print the default source")
         ;
 
     try
@@ -147,13 +148,16 @@ int main(int argc, char* argv[])
         conflicting_options(result, "get-volume", "list-sources");
         conflicting_options(result, "get-volume", "get-volume-human");
         conflicting_options(result, "get-volume", "get-default-sink");
+        conflicting_options(result, "get-volume", "get-default-source");
         conflicting_options(result, "get-volume-human", "list-sinks");
         conflicting_options(result, "get-volume-human", "list-sources");
         conflicting_options(result, "get-volume-human", "get-mute");
         conflicting_options(result, "get-volume-human", "get-default-sink");
+        conflicting_options(result, "get-volume-human", "get-default-source");
         conflicting_options(result, "get-mute", "list-sinks");
         conflicting_options(result, "get-mute", "list-sources");
         conflicting_options(result, "get-mute", "get-default-sink");
+        conflicting_options(result, "get-mute", "get-default-source");
 
         Pulseaudio pulse("pamixer");
         Device device = get_selected_device(pulse, result, sink_name, source_name);
@@ -239,6 +243,13 @@ int main(int argc, char* argv[])
                 cout << sink.index << " \""
                      << sink.name << "\" \""
                      << sink.description << "\"\n";
+            }
+            if (result.count("get-default-source")) {
+                Device source = pulse.get_default_source();
+                cout << "Default source:\n";
+                cout << source.index << " \""
+                     << source.name << "\" \""
+                     << source.description << "\"\n";
             }
         }
 
