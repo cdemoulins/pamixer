@@ -5,3 +5,8 @@
 *.xz
 *.gz
 .cache
+/build/
+
+.cproject
+
+.project
