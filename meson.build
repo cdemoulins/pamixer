@@ -5,6 +5,7 @@ src = files([
   'src/callbacks.cc',
   'src/device.cc',
   'src/stream.cc',
+  'src/sink-input.cc',
   'src/pamixer.cc',
   'src/pulseaudio.cc'
 ])
