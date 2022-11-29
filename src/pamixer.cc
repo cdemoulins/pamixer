@@ -18,6 +18,7 @@
 #include <config.hh>
 #include "pulseaudio.hh"
 #include "device.hh"
+#include "stream.hh"
 
 #include <cxxopts.hpp>
 
@@ -89,6 +90,25 @@ pa_volume_t gammaCorrection(pa_volume_t i, double gamma, int delta) {
     return (pa_volume_t) round(j);
 }
 
+/*
+* prints devices on the standard output
+*
+* Format: "index" "name" "status" "description" "mute"
+*   status: Running, Idle, Suspended, Invalid state
+*   mute: 0, 1 
+*
+* @param devices list of devices (sinks, sources, sinks + sources)
+*/
+void printDevices(std::list<Device> devices) {
+    for (const Device& device : devices) {
+        cout << device.index << " \""
+             << device.name << "\" \""
+             << device_state_to_string(device) << "\" \""
+             << device.description << "\" \""
+             << device.mute << "\"\n";
+    }
+}
+
 int main(int argc, char* argv[])
 {
     string sink_name, source_name;
@@ -118,6 +138,7 @@ int main(int argc, char* argv[])
         ("list-sinks", "list the sinks")
         ("list-sources", "list the sources")
         ("get-default-sink", "print the default sink")
+        ("list-streams", "lists the streams")
         ;
 
     try
@@ -217,21 +238,11 @@ int main(int argc, char* argv[])
         } else {
             if (result.count("list-sinks")) {
                 cout << "Sinks:\n";
-                for (const Device& sink : pulse.get_sinks()) {
-                    cout << sink.index << " \""
-                         << sink.name << "\" \""
-                         << device_state_to_string(sink) << "\" \""
-                         << sink.description << "\"\n";
-                }
+                printDevices(pulse.get_sinks());                
             }
             if (result.count("list-sources")) {
                 cout << "Sources:\n";
-                for (const Device& source : pulse.get_sources()) {
-                    cout << source.index << " \""
-                         << source.name << "\" \""
-                         << device_state_to_string(source) << "\" \""
-                         << source.description << "\"\n";
-                }
+                printDevices(pulse.get_sources());                
             }
             if (result.count("get-default-sink")) {
                 Device sink = pulse.get_default_sink();
@@ -239,6 +250,13 @@ int main(int argc, char* argv[])
                 cout << sink.index << " \""
                      << sink.name << "\" \""
                      << sink.description << "\"\n";
+            }
+            if (result.count("list-streams")) {
+                for (const Stream& stream : pulse.get_streams()) {
+                    cout << stream.name << "\" \""
+                         << stream.device << "\" \""
+                         << stream.mute << "\"\n";
+                }
             }
         }
 
