@@ -25,12 +25,18 @@
 
 
 SinkInput::SinkInput(const pa_sink_input_info* info) {
+
 	name   = info->name;
 	index = info->index;
     mute   = info->mute == 1;
     client = info->client;
     sink = info->sink;
+
+    setVolume(&(info->volume));
 }
+
+
+
 
 
 

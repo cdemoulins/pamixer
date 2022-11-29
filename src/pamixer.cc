@@ -167,10 +167,12 @@ int main(int argc, char* argv[])
         conflicting_options(result, "sink", "default-source");
         conflicting_options(result, "get-volume", "list-sinks");
         conflicting_options(result, "get-volume", "list-sources");
+        conflicting_options(result, "get-volume", "list-sinks");
         conflicting_options(result, "get-volume", "get-volume-human");
         conflicting_options(result, "get-volume", "get-default-sink");
         conflicting_options(result, "get-volume-human", "list-sinks");
         conflicting_options(result, "get-volume-human", "list-sources");
+        conflicting_options(result, "get-volume-human", "list-sinks");
         conflicting_options(result, "get-volume-human", "get-mute");
         conflicting_options(result, "get-volume-human", "get-default-sink");
         conflicting_options(result, "get-mute", "list-sinks");
@@ -254,14 +256,18 @@ int main(int argc, char* argv[])
             }
             if (result.count("list-streams")) {
                 for (const Stream& stream : pulse.get_streams()) {
-                    cout << stream.name << "\" \""
+                    cout << stream.name << " \""
                          << stream.device << "\" \""
                          << stream.mute << "\"\n";
                 }
             }
             if (result.count("list-sink-inputs")) {
                 for (const SinkInput& inputs : pulse.get_sink_inputs()) {
-                    cout << inputs.name << "\" \""
+                    cout << inputs.index << " \""
+                    	 << inputs.name << "\" \""
+						 << inputs.sink << "\" \""
+						 << inputs.client << "\" \""
+						 << inputs.volume_percent << "\" \""
                          << inputs.mute << "\"\n";
                 }
             }

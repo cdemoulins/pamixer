@@ -18,24 +18,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
+#include <basic-info.hh>
 #include <pulse/pulseaudio.h>
 #include <pulse/ext-stream-restore.h>
 #include <string>
 
 
 /**
- * Class to store streams and used devices
+ * Class to store sink inputs including
+ * client which uses the sink
  *
- * @see pa_ext_stream_restore_info
+ * @see pa_sink_input_info
  */
-class SinkInput {
+class SinkInput : public BasicInfo{
 public:
 	uint32_t index;
-    std::string name;
     uint32_t client;
     uint32_t sink;
-    bool mute;
 
     SinkInput(const pa_sink_input_info* i);
 };

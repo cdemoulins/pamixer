@@ -25,11 +25,14 @@
 
 
 Stream::Stream(const pa_ext_stream_restore_info* info) {
-	name   = info->name;
+	mute = info->mute == 1;
+	name = info->name;
 	//NULL handling as the device for the stream can point to 0x0
 	if(info->device) device = info->device;
-    mute   = info->mute == 1;
+
+    setVolume(&(info->volume));
 }
+
 
 
 

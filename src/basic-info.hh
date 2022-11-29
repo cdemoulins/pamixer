@@ -1,5 +1,5 @@
-#ifndef STREAM_H
-#define STREAM_H
+#ifndef BINFO_H
+#define BINFO_H
 
 /*
  * Copyright (C) 2022 m4sc
@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <basic-info.hh>
+
 #include <pulse/pulseaudio.h>
 #include <pulse/ext-stream-restore.h>
 #include <string>
@@ -29,10 +29,16 @@
  *
  * @see pa_ext_stream_restore_info
  */
-class Stream : public BasicInfo{
+class BasicInfo {
 public:
-    std::string device;
-    Stream(const pa_ext_stream_restore_info* i);    
+    std::string name;
+    pa_cvolume volume;
+    pa_volume_t volume_avg;
+    int volume_percent;
+    bool mute;
+
+protected:
+    void setVolume(const pa_cvolume* v);
 };
 
 #endif

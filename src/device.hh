@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
+#include <basic-info.hh>
 #include <pulse/pulseaudio.h>
 #include <string>
 
@@ -43,23 +43,15 @@ typedef enum device_state device_state_t;
  * @see pa_sink_info
  * @see pa_source_info
  */
-class Device {
+class Device : public BasicInfo{
 public:
     uint32_t index;
     device_type_t type;
-    std::string name;
     std::string description;
     device_state_t state;
-    pa_cvolume volume;
-    pa_volume_t volume_avg;
-    int volume_percent;
-    bool mute;
 
     Device(const pa_source_info* i);
     Device(const pa_sink_info* i);
-
-private:
-    void setVolume(const pa_cvolume* v);
 };
 
 #endif

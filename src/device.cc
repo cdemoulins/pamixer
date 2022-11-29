@@ -51,11 +51,3 @@ Device::Device(const pa_sink_info* info) {
     }
     setVolume(&(info->volume));
 }
-
-
-void
-Device::setVolume(const pa_cvolume* v) {
-    volume         = *v;
-    volume_avg     = pa_cvolume_avg(v);
-    volume_percent = (int) round( (double)volume_avg * 100. / PA_VOLUME_NORM );
-}

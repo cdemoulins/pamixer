@@ -1,6 +1,3 @@
-#ifndef STREAM_H
-#define STREAM_H
-
 /*
  * Copyright (C) 2022 m4sc
  *
@@ -18,21 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <basic-info.hh>
-#include <pulse/pulseaudio.h>
+
+#include "basic-info.hh"
 #include <pulse/ext-stream-restore.h>
-#include <string>
+#include <cmath>
+#include <cstring>
+#include <iostream>
 
 
-/**
- * Class to store streams and used devices
- *
- * @see pa_ext_stream_restore_info
- */
-class Stream : public BasicInfo{
-public:
-    std::string device;
-    Stream(const pa_ext_stream_restore_info* i);    
-};
+void
+BasicInfo::setVolume(const pa_cvolume* v) {
+    volume         = *v;
+    volume_avg     = pa_cvolume_avg(v);
+    volume_percent = (int) round( (double)volume_avg * 100. / PA_VOLUME_NORM );
+}
 
-#endif
+
+
