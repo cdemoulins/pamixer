@@ -90,24 +90,6 @@ pa_volume_t gammaCorrection(pa_volume_t i, double gamma, int delta) {
     return (pa_volume_t) round(j);
 }
 
-/*
-* prints devices on the standard output
-*
-* Format: "index" "name" "status" "description" "mute"
-*   status: Running, Idle, Suspended, Invalid state
-*   mute: 0, 1 
-*
-* @param devices list of devices (sinks, sources, sinks + sources)
-*/
-void printDevices(std::list<Device> devices) {
-    for (const Device& device : devices) {
-        cout << device.index << " \""
-             << device.name << "\" \""
-             << device_state_to_string(device) << "\" \""
-             << device.description << "\" \""
-             << device.mute << "\"\n";
-    }
-}
 
 int main(int argc, char* argv[])
 {
@@ -167,16 +149,20 @@ int main(int argc, char* argv[])
         conflicting_options(result, "sink", "default-source");
         conflicting_options(result, "get-volume", "list-sinks");
         conflicting_options(result, "get-volume", "list-sources");
-        conflicting_options(result, "get-volume", "list-sinks");
+        conflicting_options(result, "get-volume", "list-sink-inputs");
+        conflicting_options(result, "get-volume", "list-streams");
         conflicting_options(result, "get-volume", "get-volume-human");
         conflicting_options(result, "get-volume", "get-default-sink");
         conflicting_options(result, "get-volume-human", "list-sinks");
         conflicting_options(result, "get-volume-human", "list-sources");
-        conflicting_options(result, "get-volume-human", "list-sinks");
+        conflicting_options(result, "get-volume-human", "list-sink-inputs");
+        conflicting_options(result, "get-volume-human", "list-streams");
         conflicting_options(result, "get-volume-human", "get-mute");
         conflicting_options(result, "get-volume-human", "get-default-sink");
         conflicting_options(result, "get-mute", "list-sinks");
         conflicting_options(result, "get-mute", "list-sources");
+        conflicting_options(result, "get-mute", "list-streams");
+		conflicting_options(result, "get-mute", "list-sink-inputs");
         conflicting_options(result, "get-mute", "get-default-sink");
 
         Pulseaudio pulse("pamixer");
@@ -238,15 +224,30 @@ int main(int argc, char* argv[])
             }
         } else if (result.count("get-mute")) {
             cout << boolalpha << device.mute << '\n';
-        } else {
-            if (result.count("list-sinks")) {
-                cout << "Sinks:\n";
-                printDevices(pulse.get_sinks());                
-            }
-            if (result.count("list-sources")) {
-                cout << "Sources:\n";
-                printDevices(pulse.get_sources());                
-            }
+		} else {
+			if (result.count("list-sinks")) {
+				cout << "Sinks:\n";
+				for (const Device &sink : pulse.get_sinks()) {
+					cout << sink.index << " \""
+						 << sink.name << "\" \""
+						 << device_state_to_string(sink) << "\" \""
+						 << sink.description << "\" \""
+						 << sink.mute << "\" \""
+						 << sink.volume_percent << "\"\n";
+				}
+			}
+			if (result.count("list-sources")) {
+				cout << "Sources:\n";
+				for (const Device &source : pulse.get_sources()) {
+					cout << source.index << " \""
+						 << source.name << "\" \""
+						 << device_state_to_string(source) << "\" \""
+						 << source.description << "\" \""
+						 << source.mute << "\" \""
+						 << source.volume_percent << "\"\n";
+				}
+
+			}
             if (result.count("get-default-sink")) {
                 Device sink = pulse.get_default_sink();
                 cout << "Default sink:\n";
@@ -255,13 +256,16 @@ int main(int argc, char* argv[])
                      << sink.description << "\"\n";
             }
             if (result.count("list-streams")) {
+            	cout << "Stored Streams:\n";
                 for (const Stream& stream : pulse.get_streams()) {
                     cout << stream.name << " \""
                          << stream.device << "\" \""
+						 << stream.volume_percent << "\" \""
                          << stream.mute << "\"\n";
                 }
             }
             if (result.count("list-sink-inputs")) {
+            	cout << "Sink Inputs:\n";
                 for (const SinkInput& inputs : pulse.get_sink_inputs()) {
                     cout << inputs.index << " \""
                     	 << inputs.name << "\" \""

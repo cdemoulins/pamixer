@@ -70,8 +70,8 @@ Installation
                                   otherwise
               --list-sinks        list the sinks
               --list-sources      list the sources
-              --list-streams      list the streams
-              --list-sink-inputs  list the sink input 
+              --list-streams      list the sink/source of the stream when it was last seen
+              --list-sink-inputs  list the sink input from currently running clients
               --get-default-sink  print the default sink
 
     * Or install it::

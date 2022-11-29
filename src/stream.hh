@@ -31,6 +31,7 @@
  */
 class Stream : public BasicInfo{
 public:
+	/** The sink source of the stream when it was last seen */
     std::string device;
     Stream(const pa_ext_stream_restore_info* i);    
 };
