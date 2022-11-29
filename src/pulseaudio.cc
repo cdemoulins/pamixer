@@ -81,6 +81,11 @@ Pulseaudio::get_sources() {
     return sources;
 }
 
+/**
+ * stored streams for specific clients
+ *
+ * including stored sink and volume
+ */
 std::list<Stream>
 Pulseaudio::get_streams(){
     std::list<Stream> streams;
@@ -92,6 +97,11 @@ Pulseaudio::get_streams(){
     return streams;
 }
 
+/**
+ * current running sink inputs
+ *
+ * including client, used sink, volume ...
+ */
 std::list<SinkInput>
 Pulseaudio::get_sink_inputs() {
     std::list<SinkInput> sinkInputs;
