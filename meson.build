@@ -4,6 +4,7 @@ project('pamixer', 'cpp', version : '1.7-dev',
 src = files([
   'src/callbacks.cc',
   'src/device.cc',
+  'src/stream.cc',
   'src/pamixer.cc',
   'src/pulseaudio.cc'
 ])
