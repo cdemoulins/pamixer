@@ -83,8 +83,14 @@ public:
      */
     std::list<Device> get_sources();
 
+    /**
+     * @return list of the previously stored sinks, sources and clients
+     */
     std::list<Stream> get_streams();
 
+    /**
+     * @return list of the running sink inputs
+     */
     std::list<SinkInput>get_sink_inputs();
 
     /**
