@@ -16,23 +16,19 @@
  */
 
 
-#include "stream.hh"
+#include "basic-info.hh"
 #include <pulse/ext-stream-restore.h>
 #include <cmath>
 #include <cstring>
 #include <iostream>
 
 
-
-Stream::Stream(const pa_ext_stream_restore_info* info) {
-	mute = info->mute == 1;
-	name = info->name;
-	//NULL handling as the device for the stream can point to 0x0
-	if(info->device) device = info->device;
-
-    setVolume(&(info->volume));
+void
+BasicInfo::setVolume(const pa_cvolume* v) {
+    volume         = *v;
+    volume_avg     = pa_cvolume_avg(v);
+    volume_percent = (int) round( (double)volume_avg * 100. / PA_VOLUME_NORM );
 }
-
 
 
 

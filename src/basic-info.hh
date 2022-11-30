@@ -1,3 +1,6 @@
+#ifndef BINFO_H
+#define BINFO_H
+
 /*
  * Copyright (C) 2022 m4sc
  *
@@ -16,23 +19,26 @@
  */
 
 
-#include "stream.hh"
+#include <pulse/pulseaudio.h>
 #include <pulse/ext-stream-restore.h>
-#include <cmath>
-#include <cstring>
-#include <iostream>
+#include <string>
 
 
+/**
+ * Class to store streams and used devices
+ *
+ * @see pa_ext_stream_restore_info
+ */
+class BasicInfo {
+public:
+    std::string name;
+    pa_cvolume volume;
+    pa_volume_t volume_avg;
+    int volume_percent;
+    bool mute;
 
-Stream::Stream(const pa_ext_stream_restore_info* info) {
-	mute = info->mute == 1;
-	name = info->name;
-	//NULL handling as the device for the stream can point to 0x0
-	if(info->device) device = info->device;
+protected:
+    void setVolume(const pa_cvolume* v);
+};
 
-    setVolume(&(info->volume));
-}
-
-
-
-
+#endif

@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
+#include <basic-info.hh>
 #include <pulse/pulseaudio.h>
 #include <pulse/ext-stream-restore.h>
 #include <string>
@@ -29,11 +29,10 @@
  *
  * @see pa_ext_stream_restore_info
  */
-class Stream {
+class Stream : public BasicInfo{
 public:
-    std::string name;
+	/** The sink source of the stream when it was last seen */
     std::string device;
-    bool mute;
 
     Stream(const pa_ext_stream_restore_info* i);    
 };

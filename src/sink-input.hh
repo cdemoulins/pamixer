@@ -1,3 +1,6 @@
+#ifndef SINKINPUT_H
+#define SINKINPUT_H
+
 /*
  * Copyright (C) 2022 m4sc
  *
@@ -15,24 +18,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#include "stream.hh"
+#include <basic-info.hh>
+#include <pulse/pulseaudio.h>
 #include <pulse/ext-stream-restore.h>
-#include <cmath>
-#include <cstring>
-#include <iostream>
+#include <string>
 
 
+/**
+ * Class to store sink inputs including
+ * client which uses the sink
+ *
+ * @see pa_sink_input_info
+ */
+class SinkInput : public BasicInfo{
+public:
+	uint32_t index;
+    uint32_t client;
+    uint32_t sink;
 
-Stream::Stream(const pa_ext_stream_restore_info* info) {
-	mute = info->mute == 1;
-	name = info->name;
-	//NULL handling as the device for the stream can point to 0x0
-	if(info->device) device = info->device;
+    SinkInput(const pa_sink_input_info* i);
+};
 
-    setVolume(&(info->volume));
-}
-
-
-
-
+#endif

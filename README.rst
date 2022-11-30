@@ -14,6 +14,8 @@ Features
 * Set the volume for the default sink, the default source or any other device
 * List the sinks
 * List the sources
+* List the streams
+* List the sink-inputs
 * Increase / Decrease the volume for a device (using gamma correction optionally)
 * Mute or unmute a device
 
@@ -68,6 +70,8 @@ Installation
                                   otherwise
               --list-sinks        list the sinks
               --list-sources      list the sources
+              --list-streams      list the sink/source of the stream when it was last seen
+              --list-sink-inputs  list the sink input from currently running clients
               --get-default-sink  print the default sink
 
     * Or install it::

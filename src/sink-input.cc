@@ -16,7 +16,7 @@
  */
 
 
-#include "stream.hh"
+#include "sink-input.hh"
 #include <pulse/ext-stream-restore.h>
 #include <cmath>
 #include <cstring>
@@ -24,14 +24,18 @@
 
 
 
-Stream::Stream(const pa_ext_stream_restore_info* info) {
-	mute = info->mute == 1;
-	name = info->name;
-	//NULL handling as the device for the stream can point to 0x0
-	if(info->device) device = info->device;
+SinkInput::SinkInput(const pa_sink_input_info* info) {
+
+	name   = info->name;
+	index = info->index;
+    mute   = info->mute == 1;
+    client = info->client;
+    sink = info->sink;
 
     setVolume(&(info->volume));
 }
+
+
 
 
 
