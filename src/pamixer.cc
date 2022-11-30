@@ -120,8 +120,8 @@ int main(int argc, char* argv[])
         ("list-sinks", "list the sinks")
         ("list-sources", "list the sources")
         ("get-default-sink", "print the default sink")
-        ("list-streams", "lists the streams")
-		("list-sink-inputs", "list of sink inputs")
+        ("list-streams", "list the sink/source of the stream when it was last seen")
+		("list-sink-inputs", "list the sink input from currently running clients")
         ;
 
     try
