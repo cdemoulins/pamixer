@@ -28,22 +28,22 @@ Choose a different sink than the default.
 Choose a different source than the default.
 
 .TP
-.B \-\-default-source
+.B \-\-default\-source
 .br
 Select the default source.
 
 .TP
-.B \-\-get-volume
+.B \-\-get\-volume
 .br
 Get the current volume.
 
 .TP
-.B \-\-get-volume-human
+.B \-\-get\-volume\-human
 .br
 Get the current volume percentage or the string "muted".
 
 .TP
-.BI \-\-set-volume " PERCENTAGE"
+.BI \-\-set\-volume " PERCENTAGE"
 .br
 Set the volume.
 
@@ -58,7 +58,7 @@ Increase the volume.
 Decrease the volume.
 
 .TP
-.B "\-t, \-\-toggle-mute"
+.B "\-t, \-\-toggle\-mute"
 .br
 Switch between mute and unmute.
 
@@ -68,14 +68,14 @@ Switch between mute and unmute.
 Set mute.
 
 .TP
-.BI \-\-allow-boost
+.BI \-\-allow\-boost
 .br
 Allow volume to go above 100%.
 
 .TP
 .BI \-\-gamma " AMOUNT"
 .br
-Increase/decrease using gamma correction e.g. 2.2.
+Increase/decrease using gamma correction, e.g. 2.2.
 
 .TP
 .B "\-u, \-\-unmute"
@@ -83,27 +83,27 @@ Increase/decrease using gamma correction e.g. 2.2.
 Unset mute.
 
 .TP
-.B \-\-get-mute
+.B \-\-get\-mute
 .br
 Display true if the volume is mute, false otherwise.
 
 .TP
-.B \-\-list-sinks
+.B \-\-list\-sinks
 .br
 List the sinks.
 
 .TP
-.B \-\-list-sources
+.B \-\-list\-sources
 .br
 List the sources.
 
 .SH EXAMPLES
 .TP
-.B "pamixer -d 5"
+.B "pamixer \-d 5"
 Will decrease the volume by 5% on the default sink.
 
 .TP
-.B "pamixer --source 2 -m"
+.B "pamixer \-\-source 2 \-m"
 Will mute source 2.
 
 .SH SEE ALSO
@@ -112,4 +112,4 @@ Will mute source 2.
 
 
 .SH COPYRIGHT
-Copyright \(co 2011 - 2022 Clément Démoulins <clement@archivel.fr>.
+Copyright \(co 2011-2022 Clément Démoulins <clement@archivel.fr>.
