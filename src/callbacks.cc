@@ -28,6 +28,23 @@ void sink_list_cb(pa_context * UNUSED(c), const pa_sink_info *i, int eol, void *
     sinks->push_back(s);
 }
 
+void sink_input_list_cb(pa_context * UNUSED(c), const pa_sink_input_info* i, int eol, void *raw) {
+    if (eol != 0) return;
+
+    std::list<SinkInput>* sinks = (std::list<SinkInput>*) raw;
+    SinkInput s(i);
+    sinks->push_back(s);
+}
+
+
+void stream_list_cb(pa_context * UNUSED(c), const pa_ext_stream_restore_info *i, int eol, void *raw) {
+    if (eol != 0) return;
+
+    std::list<Stream>* streams = (std::list<Stream>*) raw;
+    Stream st(i);
+    streams->push_back(st);
+}
+
 void source_list_cb(pa_context * UNUSED(c), const pa_source_info *i, int eol, void *raw) {
     if (eol != 0) return;
 

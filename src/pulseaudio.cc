@@ -81,6 +81,27 @@ Pulseaudio::get_sources() {
     return sources;
 }
 
+std::list<Stream>
+Pulseaudio::get_streams(){
+    std::list<Stream> streams;
+    pa_operation* op = pa_ext_stream_restore_read(context, &stream_list_cb, &streams);
+
+    iterate(op);
+    pa_operation_unref(op);
+
+    return streams;
+}
+
+std::list<SinkInput>
+Pulseaudio::get_sink_inputs() {
+    std::list<SinkInput> sinkInputs;
+    pa_operation* op = pa_context_get_sink_input_info_list(context, &sink_input_list_cb, &sinkInputs);
+    iterate(op);
+    pa_operation_unref(op);
+
+    return sinkInputs;
+}
+
 Device
 Pulseaudio::get_sink(uint32_t index) {
     std::list<Device> sinks;

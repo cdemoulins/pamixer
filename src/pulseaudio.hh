@@ -24,6 +24,9 @@
 #include <list>
 
 #include "device.hh"
+#include "stream.hh"
+#include "sink-input.hh"
+
 #include "callbacks.hh"
 
 
@@ -79,6 +82,16 @@ public:
      * @return list of the available sources
      */
     std::list<Device> get_sources();
+
+    /**
+     * @return list of the previously stored sinks, sources and clients
+     */
+    std::list<Stream> get_streams();
+
+    /**
+     * @return list of the running sink inputs
+     */
+    std::list<SinkInput>get_sink_inputs();
 
     /**
      * Get a specific sink

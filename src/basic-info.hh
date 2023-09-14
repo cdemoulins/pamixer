@@ -1,8 +1,8 @@
-#ifndef DEVICE_H
-#define DEVICE_H
+#ifndef BINFO_H
+#define BINFO_H
 
 /*
- * Copyright (C) 2011 Clément Démoulins <clement@archivel.fr>
+ * Copyright (C) 2022 m4sc
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,40 +18,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <basic-info.hh>
+
 #include <pulse/pulseaudio.h>
+#include <pulse/ext-stream-restore.h>
 #include <string>
 
 
-enum device_type {
-    SOURCE,
-    SINK
-};
-typedef enum device_type device_type_t;
-
-enum device_state {
-    DEVICE_INVALID_STATE,
-    DEVICE_RUNNING,
-    DEVICE_IDLE,
-    DEVICE_SUSPENDED
-};
-typedef enum device_state device_state_t;
-
 /**
- * Class to store device (sink or source) related informations
+ * Class to store streams and used devices
  *
- * @see pa_sink_info
- * @see pa_source_info
+ * @see pa_ext_stream_restore_info
  */
-class Device : public BasicInfo{
+class BasicInfo {
 public:
-    uint32_t index;
-    device_type_t type;
-    std::string description;
-    device_state_t state;
+    std::string name;
+    pa_cvolume volume;
+    pa_volume_t volume_avg;
+    int volume_percent;
+    bool mute;
 
-    Device(const pa_source_info* i);
-    Device(const pa_sink_info* i);
+protected:
+    void setVolume(const pa_cvolume* v);
 };
 
 #endif

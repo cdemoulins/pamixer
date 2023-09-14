@@ -3,7 +3,10 @@ project('pamixer', 'cpp', version : '1.7-dev',
 
 src = files([
   'src/callbacks.cc',
+  'src/basic-info.cc',
   'src/device.cc',
+  'src/stream.cc',
+  'src/sink-input.cc',
   'src/pamixer.cc',
   'src/pulseaudio.cc'
 ])
