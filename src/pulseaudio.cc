@@ -170,3 +170,14 @@ Pulseaudio::set_mute(Device& device, bool mute) {
     iterate(op);
     pa_operation_unref(op);
 }
+
+void
+Pulseaudio::set_default(Device& device) {
+    pa_operation* op;
+    if (device.type == SINK)
+        op = pa_context_set_default_sink(context, device.name.c_str(), success_cb, NULL);
+    else
+        op = pa_context_set_default_source(context, device.name.c_str(), success_cb, NULL);
+    iterate(op);
+    pa_operation_unref(op);
+}

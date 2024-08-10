@@ -97,6 +97,11 @@ List the sinks.
 .br
 List the sources.
 
+.TP
+.B \-\-set\-default
+.br
+Set default sink/source.
+
 .SH EXAMPLES
 .TP
 .B "pamixer \-d 5"
@@ -105,6 +110,10 @@ Will decrease the volume by 5% on the default sink.
 .TP
 .B "pamixer \-\-source 2 \-m"
 Will mute source 2.
+
+.TP
+.B "pamixer \-\-sink 56 \-\-set\-default"
+Will set sink with index 56 as default.
 
 .SH SEE ALSO
 .BR amixer (1),

@@ -16,6 +16,7 @@ Features
 * List the sources
 * Increase / Decrease the volume for a device (using gamma correction optionally)
 * Mute or unmute a device
+* Set the default sink or source
 
 Dependencies
 ------------
@@ -69,6 +70,7 @@ Installation
               --list-sinks        list the sinks
               --list-sources      list the sources
               --get-default-sink  print the default sink
+              --set-default       set the specified sink/source using --sink/--source as default
 
     * Or install it::
 

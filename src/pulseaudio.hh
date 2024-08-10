@@ -127,6 +127,12 @@ public:
      * @param mute
      */
     void set_mute(Device& device, bool mute);
+
+    /**
+     * Set the specified device as default
+     * @param device
+     */
+    void set_default(Device& device);
 };
 
 #endif
